@@ -35,7 +35,7 @@ Vue.use(VueDusionKeyboard)
 **对于js动态生成的输入框，vue-dusion-keyboard提供以下两种方法注册**
 - 当有新的input标签生成时，重新调用`sign_up_keyboard`方法注册。
 ```
-windwo.sign_up_keyboard();
+window.sign_up_keyboard();
 ```
 - (已过时，不建议)调用组件内部显示和隐藏的方法
 ```
@@ -101,8 +101,8 @@ windwo.sign_up_keyboard();
 |方法名|说明|参数|
 |:-:|:-|:-|
 |sign_up_keyboard|重新注册input显示键盘,当页面有新的input标签出现时调用此方法|event|
-|show_keyboard|((已过时，不建议))注册显示键盘事件|event|
-|hide_keyboard|((已过时，不建议))注册隐藏键盘事件|event|
+|show_keyboard|(已过时，不建议)注册显示键盘事件|event|
+|hide_keyboard|(已过时，不建议)注册隐藏键盘事件|event|
 
 ### 更新
 - **v1.0.2**<br>
@@ -112,7 +112,10 @@ windwo.sign_up_keyboard();
 - **v1.0.4**<br>
 1.继续修复all模式下键盘隐藏事件无效的问题。
 - **v1.0.5**<br>
-1.添加全局方法`sign_up_keyboard()`，当页面有新的input标签出现时调用此方法即可。
+1.添加全局方法`sign_up_keyboard()`，当页面有新的input标签出现时调用此方法即可。<br>
 2.添加`size`属性，最小宽度支持到`1080`。
+- **v1.0.6**<br>
+1.修复离线模式下手写报错的bug<br>
+2.修复当input标签或其父元素设置了css属性zoom时，键盘弹出位置不正确的问题
 
 

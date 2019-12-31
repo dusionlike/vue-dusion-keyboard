@@ -208,7 +208,7 @@ export default {
       this.handWrite
         .GetWords(this.clickX, this.clickY, this.clickC)
         .then(res => {
-          this.write_result = res.data;
+          this.write_result = res.data||res;
         })
         .catch(err => {
           console.error(err);

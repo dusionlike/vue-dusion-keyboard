@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" >
     拼音：
     <input type="text" data-mode="cn" />
     手写：
@@ -9,7 +9,12 @@
     数字：
     <input type="text" data-mode="num" />
     空：
-    <input type="text" >
+    <input type="text" />
+    zoom：
+    <span style="zoom:1.6;">
+      <input type="text" data-mode="num" class="zzz" />
+    </span>
+
     <!-- <input v-if="show" @focus="$refs.keyboard.show_keyboard" @blur="$refs.keyboard.hide_keyboard" type="text" /> -->
     <vue-dusion-keyboard
       ref="keyboard"
@@ -19,8 +24,9 @@
       size="mini"
       HandWriteApi="http://localhost/HandWriteApi/words"
     ></vue-dusion-keyboard>
-    <button >测试</button>
-    <div style="width:400px;height:400px;background:#000;"></div>
+    <!-- HandWriteApi="http://localhost/HandWriteApi/words" -->
+    <button>测试</button>
+    <!-- <div style="width:400px;height:400px;background:#000;"></div> -->
     <!-- <vue-dusion-keyboard hand float :blurHide="false"></vue-dusion-keyboard> -->
     <!-- :blurHide="false" -->
   </div>
@@ -30,12 +36,12 @@
 export default {
   name: "app",
   mounted() {
-    this.show = true
+    this.show = true;
   },
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
-      show:false
+      show: false
     };
   }
 };
@@ -44,13 +50,16 @@ export default {
 <style lang="scss">
 #app {
   height: 1500px;
-  width: 1080px;
+  // width: 1080px;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.zzz {
+  zoom: 1.5;
 }
 
 h1,

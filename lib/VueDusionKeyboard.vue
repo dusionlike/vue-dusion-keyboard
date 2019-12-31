@@ -284,6 +284,15 @@ export default {
         });
       });
     },
+    //往上查找计算父元素的zoom
+    getZoom(dom, zoom = 1) {
+      let m_zoom =
+        dom.style.zoom || window.getComputedStyle(dom, null).zoom || 1;
+      zoom = zoom * m_zoom;
+      return dom.parentNode !== document
+        ? this.getZoom(dom.parentNode, zoom)
+        : zoom;
+    },
     /**注册显示键盘事件 */
     show_keyboard(e) {
       this.input = e.target;
@@ -292,11 +301,16 @@ export default {
       if (this.input && this.float) {
         let bound = this.input.getBoundingClientRect();
         let toptop = document.documentElement.scrollTop;
+        //当css设置了zoom时
+        let zoom = this.getZoom(this.input);
+
+        let st_top = (bound.y + bound.height + 10 + toptop) * zoom;
+        // console.log(bound);
         this.st = {
           position: "absolute",
           left: "0",
           "z-index": "10",
-          top: bound.y + bound.height + 10 + toptop + "px"
+          top: st_top + "px"
         };
       }
     },
