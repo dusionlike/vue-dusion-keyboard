@@ -284,14 +284,38 @@ export default {
         });
       });
     },
-    //往上查找计算父元素的zoom
-    getZoom(dom, zoom = 1) {
+    /**
+     * 往上查找计算父元素的zoom
+     * dom：父级document
+     * zoom：计算的放大倍数
+     * isThisParent：是否已经到达本控件所在的层级的父级
+     */
+    getZoom(dom, zoom = 1, isThisParent = false) {
+      //当前dom的zoom
       let m_zoom =
         dom.style.zoom || window.getComputedStyle(dom, null).zoom || 1;
       zoom = zoom * m_zoom;
-      return dom.parentNode !== document
-        ? this.getZoom(dom.parentNode, zoom)
-        : zoom;
+
+      if (!isThisParent) {
+        let children = dom.children;
+        for (let i = 0; i < children.length; i++) {
+          if (this.$el == children[i]) {
+            isThisParent = true;
+            continue;
+          }
+        }
+      }
+      // console.log(dom);
+      if (dom.parentNode == document) {
+        return zoom;
+      }
+      //到达插件的父级，并且position=relative，停止往上计算
+      if (isThisParent) {
+        let position =
+          dom.style.position || window.getComputedStyle(dom, null).position;
+        if (position == "relative") return zoom;
+      }
+      return this.getZoom(dom.parentNode, zoom);
     },
     /**注册显示键盘事件 */
     show_keyboard(e) {

@@ -75,10 +75,6 @@ window.sign_up_keyboard();
 此项目引用了[animate.css](https://daneden.github.io/animate.css/)，用于键盘显示隐藏的过渡动画，内置fadeInUp和fadeOutDown，如需其他效果，请引入animate.css文件，然后配置属性`enter-active-class`和`leave-active-class`
 
 ---
-## Axios
-由于调用手写输入接口需要，本项目引入了`axios`。
-
----
 ## input标签属性
 |属性|说明|类型|可选值|默认值|
 |:-:|:-|:-|:-|:-|
@@ -117,5 +113,8 @@ window.sign_up_keyboard();
 - **v1.0.6**<br>
 1.修复离线模式下手写报错的bug<br>
 2.修复当input标签或其父元素设置了css属性zoom时，键盘弹出位置不正确的问题
+- **v1.0.7**<br>
+1.修改zoom属性检索只检索到上一个 position: relative; <br>
+2.为压缩体积，干掉了axios
 
 
