@@ -202,7 +202,9 @@ export default {
       window.$hide_keyboard = this.hide_keyboard;
     }
     window.sign_up_keyboard = this.sign_up_keyboard;
-    this.sign_up_keyboard();
+    this.$nextTick(() => {
+      this.sign_up_keyboard();
+    });
   },
   components: { paint },
   props: {
@@ -271,17 +273,15 @@ export default {
     /**重新注册所有input标签 */
     sign_up_keyboard() {
       const _this = this;
-      this.$nextTick(() => {
-        //每个input添加事件
-        let inputAll = document.querySelectorAll("input");
-        inputAll.forEach(input => {
-          if (_this.all || input.dataset.mode) {
-            input.addEventListener("focus", _this.show_keyboard);
-            if (_this.blurHide) {
-              input.addEventListener("blur", _this.hide_keyboard);
-            }
+      //每个input添加事件
+      let inputAll = document.querySelectorAll("input");
+      inputAll.forEach(input => {
+        if (_this.all || input.dataset.mode) {
+          input.addEventListener("focus", _this.show_keyboard);
+          if (_this.blurHide) {
+            input.addEventListener("blur", _this.hide_keyboard);
           }
-        });
+        }
       });
     },
     /**

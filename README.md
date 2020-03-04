@@ -116,5 +116,6 @@ window.sign_up_keyboard();
 - **v1.0.7**<br>
 1.修改zoom属性检索只检索到上一个 position: relative; <br>
 2.为压缩体积，干掉了axios
-
+- **v1.0.8**<br>
+1.修改sign_up_keyboard为异步方法
 
