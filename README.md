@@ -59,6 +59,11 @@ window.sign_up_keyboard();
 ##### nodejs模块:
 - `ffi`
 - `ref`
+
+ffi安装失败的小伙伴可以安装：
+- `ffi-napi`
+- `ref-napi`
+
 ##### C++库:
 - `XDLL.dll` : 放置在electron根目录的`plug\\handWrite\\XDLL.dll`下。
 ##### 手写字库:
@@ -91,6 +96,7 @@ window.sign_up_keyboard();
 |**enter-active-class**|输入组件弹出来的动画效果，基于[Animate.css](https://daneden.github.io/animate.css/)|String|见 [Animate.css](https://daneden.github.io/animate.css/) 官网|fadeInUp|
 |**leave-active-class**|输入组件隐藏时的动画效果|String|同上|fadeOutDown|
 |**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
+|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
 |**pun_keys**|替换标点符号（16个）|Array|略|无
 |**num_pun_keys**|替换数字键盘左侧标点符号（4个）|Array|略|无
 
@@ -107,3 +113,7 @@ window.sign_up_keyboard();
 - 标点符号改为16个，可通过属性`pun_keys`替换
 - 数字键盘左侧增加四个标点符号按钮，可通过属性`num_pun_keys`替换
 - `float`属性默认为true
+
+#### **v2.1.0**
+- ffi模块如果找不到则会加载ffi-napi，ref同理
+- 新增`dll-path`属性，可自定义手写库的路径

@@ -1,11 +1,11 @@
 import WebHandWrite from "./web";
 import LocalHandWrite from "./electron";
 
-export function getHandWrite(api?: string): HandWrite {
-    if (api) {
-        return new WebHandWrite(api)
+export function getHandWrite(path?: string): HandWrite {
+    if (/^http/g.test(path)) {
+        return new WebHandWrite(path)
     } else {
-        return new LocalHandWrite()
+        return new LocalHandWrite(path)
     }
 }
 

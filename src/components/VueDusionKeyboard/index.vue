@@ -95,7 +95,8 @@
           :p_height="main_height"
           @SelectText="HandText"
           :lib="handLib"
-          :HandWriteApi="HandWriteApi"
+          :hand-write-api="handWriteApi"
+          :dll-path="dllPath"
         ></paint>
         <div class="hand-left-box">
           <span class="key hand-del" @click="del()">
@@ -220,7 +221,8 @@ export default Vue.extend({
     blurHide: { type: Boolean, default: true },
     EnterActiveClass: { type: String, default: "fadeInUp" },
     LeaveActiveClass: { type: String, default: "fadeOutDown" },
-    HandWriteApi: [String],
+    handWriteApi: String,
+    dllPath: String,
     pun_keys: { default: () => AllKey.punctuation },
     num_pun_keys: { default: () => AllKey.num_pun }
   },

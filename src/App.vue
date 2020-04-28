@@ -12,23 +12,26 @@
     <input type="text" data-mode="biaodian" />
     空：
     <input type="text" />
-    <br>
-    <br>
-    zoom：
+    <br />
+    <br />zoom：
     <span style="zoom:1.6;">
       <input type="text" data-mode="num" class="zzz" />
     </span>
 
     <!-- <input v-if="show" @focus="$refs.keyboard.show_keyboard" @blur="$refs.keyboard.hide_keyboard" type="text" /> -->
-    <vue-dusion-keyboard v-if="isElectron" :blurHide="false" size="mini" hand></vue-dusion-keyboard>
+    <vue-dusion-keyboard
+      v-if="isElectron"
+      :blurHide="false"
+      size="mini"
+      dll-path="plug\\handWrite"
+    ></vue-dusion-keyboard>
     <vue-dusion-keyboard
       v-else
       :blurHide="false"
       size="mini"
-      hand
-      HandWriteApi="http://jsrtj.fotoit.cn/iis/HandWriteApi/words"
+      hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words"
     ></vue-dusion-keyboard>
-    <!-- HandWriteApi="http://localhost/HandWriteApi/words" -->
+    <!-- hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" -->
     <button>测试</button>
     <!-- <div style="width:400px;height:400px;background:#000;"></div> -->
     <!-- <vue-dusion-keyboard hand float :blurHide="false"></vue-dusion-keyboard> -->

@@ -50,12 +50,11 @@ interface DataOps {
 export default Vue.extend({
   name: "paint",
   mounted() {
-    handWrite = getHandWrite(this.HandWriteApi);
-    // console.log(this.HandWriteApi);
-    handWrite.createLib(this.lib).catch(err=>{
+    handWrite = getHandWrite(this.handWriteApi || this.dllPath);
+    // console.log(this.handWriteApi);
+    handWrite.createLib(this.lib).catch(err => {
       console.error(err);
-      
-    })
+    });
     this.$nextTick(() => {
       canvas = this.$refs.canvas as HTMLCanvasElement;
       ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -78,7 +77,8 @@ export default Vue.extend({
       type: String,
       default: "CN"
     },
-    HandWriteApi: [String]
+    handWriteApi: String,
+    dllPath: String
   },
   data(): DataOps {
     return {
