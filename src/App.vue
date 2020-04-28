@@ -26,7 +26,7 @@
       :blurHide="false"
       size="mini"
       hand
-      HandWriteApi="http://localhost/HandWriteApi/words"
+      HandWriteApi="http://jsrtj.fotoit.cn/iis/HandWriteApi/words"
     ></vue-dusion-keyboard>
     <!-- HandWriteApi="http://localhost/HandWriteApi/words" -->
     <button>测试</button>

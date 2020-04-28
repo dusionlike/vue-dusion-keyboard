@@ -202,7 +202,7 @@ export default Vue.extend({
     _hide_keyboard = this.hide_keyboard.bind(this);
     window.sign_up_keyboard = this.sign_up_keyboard.bind(this);
     this.$nextTick(() => {
-      if (this.all) {
+      if (this.observer) {
         this.initMutationObserver();
       }
       this.sign_up_keyboard();
@@ -216,6 +216,7 @@ export default Vue.extend({
     size: { type: String, default: "primary" },
     float: { type: Boolean, default: true },
     all: { type: Boolean, default: false },
+    observer: { type: Boolean, default: true },
     blurHide: { type: Boolean, default: true },
     EnterActiveClass: { type: String, default: "fadeInUp" },
     LeaveActiveClass: { type: String, default: "fadeOutDown" },
