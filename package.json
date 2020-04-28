@@ -11,6 +11,9 @@
     "lib": "vue-cli-service build --modern --target lib --name VueDusionKeyboard src/components/VueDusionKeyboard/index.vue",
     "tsc":"tsc --build"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dusionlike/vue-dusion-keyboard"
