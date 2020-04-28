@@ -17,7 +17,8 @@ Vue.component('VueDusionKeyboard', VueDusionKeyboard)
 ### 标签引入
 ```
 <!--先引入vue.js-->
-<script src="./vue-dusion-keyboard.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+<script src="./VueDusionKeyboard.umd.min.js"></script>
 <script>
 new Vue({
   components: {
