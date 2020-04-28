@@ -1,44 +1,38 @@
 {
   "name": "vue-dusion-keyboard",
+  "version": "2.0.0",
   "description": "基于vue.js的web键盘，支持离线模式。",
-  "version": "1.0.8",
-  "author": "dusion",
   "license": "MIT",
+  "main": "dist/VueDusionKeyboard.umd.js",
   "private": false,
-  "main": "dist/vue-dusion-keyboard.js",
-  "files": [
-    "dist",
-    "lib"
-  ],
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --modern --target lib --name VueDusionKeyboard src/components/VueDusionKeyboard/index.vue",
+    "tsc":"tsc --build"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dusionlike/vue-dusion-keyboard"
   },
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
-  },
   "dependencies": {
-    "vue": "^2.5.11"
+    "core-js": "^3.6.4",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@types/ffi": "^0.2.2",
+    "@types/ref": "^0.0.28",
+    "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-typescript": "~4.3.0",
+    "@vue/cli-service": "~4.3.0",
+    "sass": "^1.26.3",
+    "sass-loader": "^8.0.2",
+    "typescript": "~3.8.3",
+    "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
-  ],
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "cross-env": "^5.2.1",
-    "css-loader": "^0.28.7",
-    "file-loader": "^1.1.4",
-    "node-sass": "^4.5.3",
-    "sass-loader": "^6.0.6",
-    "vue-loader": "^13.0.5",
-    "vue-template-compiler": "^2.4.4",
-    "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.11.5"
-  }
+    "not dead"
+  ]
 }

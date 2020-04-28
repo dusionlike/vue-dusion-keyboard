@@ -6,7 +6,7 @@
   >
     <div
       v-show="show"
-      :style="st"
+      :style="keyboardStyle"
       :class="'my-keyboard my-keyboard__'+size"
       @mousedown="mousedown"
       ref="my_keyboard"
@@ -32,7 +32,24 @@
       </div>
       <!-- 数字键盘 -->
       <div v-if="mode==='num'||mode==='biaodian'" class="main-keyboard">
-        <div class="number-box">
+        <div class="pun-box" v-if="mode==='num'">
+          <span
+            class="key number"
+            style="margin-left: 0px;"
+            :key="index"
+            v-for="(key, index) in num_pun_keys"
+            @click="e=>clickNumber(e, key)"
+          >{{key}}</span>
+        </div>
+        <div class="all-pun-box" v-if="mode==='biaodian'">
+          <span
+            class="key number"
+            :key="index"
+            v-for="(key, index) in number_keys2"
+            @click="e=>clickNumber(e, key)"
+          >{{key}}</span>
+        </div>
+        <div class="number-box" v-if="mode==='num'">
           <span
             class="key number"
             :key="index"
@@ -42,21 +59,13 @@
         </div>
         <div class="del-box">
           <span class="key number num-del" @click="del()">
-            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
-              <path
-                d="M938.8 227.7H284.6L0.1 511.3l284.4 284.4v0.8h654.2c47.1 0 85.3-38.2 85.3-85.3V313c0.1-47.1-38.1-85.3-85.2-85.3z m-172.1 385l-40.2 40.2-100.6-100.6-100.6 100.6-40.2-40.2 100.6-100.6-100.6-100.5 40.2-40.2L625.9 472l100.6-100.6 40.2 40.2-100.6 100.5 100.6 100.6z"
-              />
-            </svg>
+            <svg-del class="del"></svg-del>
           </span>
           <!-- <span v-if="mode==='biaodian'" class="key number blue"></span>
           <span v-else class="key number" @click="mode='biaodian'">标点</span>-->
           <span class="key number blue" @click="mode='en_cap'">中/英</span>
           <span class="key key_hide number" style="margin-left: 0px;" @click="HideKey">
-            <svg class="jp" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M390.94044445 560.84859262h97.39377777V463.45481485H390.94044445v97.39377777zM560.24177778 317.81925929H463.75822222v97.39377778h97.39377778V317.81925929z m-145.63555556 0H318.12266667v97.39377778h97.39377778V317.81925929z m291.27111111 0H609.39377778v97.39377778h97.39377777V317.81925929zM536.576 560.84859262h97.39377778V463.45481485H536.576v97.39377777zM268.97066667 317.81925929H172.48711111v97.39377778h97.39377778V317.81925929z m486.05866666 97.39377778h97.39377778V317.81925929H755.02933333v97.39377778z m145.63555556-243.02933334H123.33511111c-53.70311111 0-97.39377778 43.69066667-97.39377778 97.39377778V754.72592595c0 53.70311111 43.69066667 97.39377778 97.39377778 97.39377778h776.41955556c53.70311111 0 97.39377778-43.69066667 97.39377778-97.39377778V269.57748151c0-53.70311111-43.69066667-97.39377778-96.48355556-97.39377778z m48.24177778 582.54222222c0 26.39644445-21.84533333 48.24177778-48.24177778 48.24177778H123.33511111c-26.39644445 0-48.24177778-21.84533333-48.24177778-48.24177778V269.57748151c0-26.39644445 21.84533333-48.24177778 48.24177778-48.24177778h776.41955556c26.39644445 0 48.24177778 21.84533333 48.24177778 48.24177778l0.91022222 485.14844444zM682.21155555 560.84859262h97.39377778V463.45481485H682.21155555v97.39377777z m-388.66488888 145.63555556h436.90666666V609.0903704H293.54666667v97.39377778zM341.78844445 463.45481485H245.30488889v97.39377777h97.39377778V463.45481485z"
-              />
-            </svg>
+            <svg-keyboard class="jp"></svg-keyboard>
             <span>
               隐藏
               <br />
@@ -90,18 +99,10 @@
         ></paint>
         <div class="hand-left-box">
           <span class="key hand-del" @click="del()">
-            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
-              <path
-                d="M938.8 227.7H284.6L0.1 511.3l284.4 284.4v0.8h654.2c47.1 0 85.3-38.2 85.3-85.3V313c0.1-47.1-38.1-85.3-85.2-85.3z m-172.1 385l-40.2 40.2-100.6-100.6-100.6 100.6-40.2-40.2 100.6-100.6-100.6-100.5 40.2-40.2L625.9 472l100.6-100.6 40.2 40.2-100.6 100.5 100.6 100.6z"
-              />
-            </svg>
+            <svg-del class="del"></svg-del>
           </span>
           <span class="key key_hide" @click="HideKey">
-            <svg class="jp" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M390.94044445 560.84859262h97.39377777V463.45481485H390.94044445v97.39377777zM560.24177778 317.81925929H463.75822222v97.39377778h97.39377778V317.81925929z m-145.63555556 0H318.12266667v97.39377778h97.39377778V317.81925929z m291.27111111 0H609.39377778v97.39377778h97.39377777V317.81925929zM536.576 560.84859262h97.39377778V463.45481485H536.576v97.39377777zM268.97066667 317.81925929H172.48711111v97.39377778h97.39377778V317.81925929z m486.05866666 97.39377778h97.39377778V317.81925929H755.02933333v97.39377778z m145.63555556-243.02933334H123.33511111c-53.70311111 0-97.39377778 43.69066667-97.39377778 97.39377778V754.72592595c0 53.70311111 43.69066667 97.39377778 97.39377778 97.39377778h776.41955556c53.70311111 0 97.39377778-43.69066667 97.39377778-97.39377778V269.57748151c0-53.70311111-43.69066667-97.39377778-96.48355556-97.39377778z m48.24177778 582.54222222c0 26.39644445-21.84533333 48.24177778-48.24177778 48.24177778H123.33511111c-26.39644445 0-48.24177778-21.84533333-48.24177778-48.24177778V269.57748151c0-26.39644445 21.84533333-48.24177778 48.24177778-48.24177778h776.41955556c26.39644445 0 48.24177778 21.84533333 48.24177778 48.24177778l0.91022222 485.14844444zM682.21155555 560.84859262h97.39377778V463.45481485H682.21155555v97.39377777z m-388.66488888 145.63555556h436.90666666V609.0903704H293.54666667v97.39377778zM341.78844445 463.45481485H245.30488889v97.39377777h97.39377778V463.45481485z"
-              />
-            </svg>
+            <svg-keyboard class="jp"></svg-keyboard>
             <span>
               隐藏
               <br />
@@ -150,11 +151,7 @@
           @click="e=>clickKey(e, key)"
         >{{key}}</span>
         <span class="key key_hide" @click="HideKey">
-          <svg class="jp" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M390.94044445 560.84859262h97.39377777V463.45481485H390.94044445v97.39377777zM560.24177778 317.81925929H463.75822222v97.39377778h97.39377778V317.81925929z m-145.63555556 0H318.12266667v97.39377778h97.39377778V317.81925929z m291.27111111 0H609.39377778v97.39377778h97.39377777V317.81925929zM536.576 560.84859262h97.39377778V463.45481485H536.576v97.39377777zM268.97066667 317.81925929H172.48711111v97.39377778h97.39377778V317.81925929z m486.05866666 97.39377778h97.39377778V317.81925929H755.02933333v97.39377778z m145.63555556-243.02933334H123.33511111c-53.70311111 0-97.39377778 43.69066667-97.39377778 97.39377778V754.72592595c0 53.70311111 43.69066667 97.39377778 97.39377778 97.39377778h776.41955556c53.70311111 0 97.39377778-43.69066667 97.39377778-97.39377778V269.57748151c0-53.70311111-43.69066667-97.39377778-96.48355556-97.39377778z m48.24177778 582.54222222c0 26.39644445-21.84533333 48.24177778-48.24177778 48.24177778H123.33511111c-26.39644445 0-48.24177778-21.84533333-48.24177778-48.24177778V269.57748151c0-26.39644445 21.84533333-48.24177778 48.24177778-48.24177778h776.41955556c26.39644445 0 48.24177778 21.84533333 48.24177778 48.24177778l0.91022222 485.14844444zM682.21155555 560.84859262h97.39377778V463.45481485H682.21155555v97.39377777z m-388.66488888 145.63555556h436.90666666V609.0903704H293.54666667v97.39377778zM341.78844445 463.45481485H245.30488889v97.39377777h97.39377778V463.45481485z"
-            />
-          </svg>
+          <svg-keyboard class="jp"></svg-keyboard>
           <span>
             隐藏
             <br />
@@ -177,54 +174,61 @@
         <span class="key" @click="e=>clickKey(e, '.',true)">.</span>
         <span class="key space" @click="e=>clickKey(e, ' ',true)">空格</span>
         <span class="key def-del" style="width:140px;" @click="del()">
-          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
-            <path
-              d="M938.8 227.7H284.6L0.1 511.3l284.4 284.4v0.8h654.2c47.1 0 85.3-38.2 85.3-85.3V313c0.1-47.1-38.1-85.3-85.2-85.3z m-172.1 385l-40.2 40.2-100.6-100.6-100.6 100.6-40.2-40.2 100.6-100.6-100.6-100.5 40.2-40.2L625.9 472l100.6-100.6 40.2 40.2-100.6 100.5 100.6 100.6z"
-            />
-          </svg>
+          <svg-del class="del"></svg-del>
         </span>
       </div>
     </div>
   </transition>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import AllKey from "./key";
 import dict from "./dist/pinyin_dict_notone";
 import paint from "./paint.vue";
 
-export default {
+import SvgDel from "./svg/svg-del.vue";
+import SvgKeyboard from "./svg/svg-keybord.vue";
+
+let _show_keyboard: (ev: FocusEvent) => void;
+let _hide_keyboard: (ev: FocusEvent) => void;
+
+let inputElement: HTMLInputElement;
+
+export default Vue.extend({
   name: "vue-dusion-keyboard",
   mounted() {
-    //注册全局方法
-    if (this.window) {
-      window.$show_keyboard = this.show_keyboard;
-      window.$hide_keyboard = this.hide_keyboard;
-    }
-    window.sign_up_keyboard = this.sign_up_keyboard;
+    _show_keyboard = this.show_keyboard.bind(this);
+    _hide_keyboard = this.hide_keyboard.bind(this);
+    window.sign_up_keyboard = this.sign_up_keyboard.bind(this);
     this.$nextTick(() => {
+      if (this.all) {
+        this.initMutationObserver();
+      }
       this.sign_up_keyboard();
     });
   },
-  components: { paint },
+  beforeDestroy() {
+    this.clean_sign_up();
+  },
+  components: { paint, SvgDel, SvgKeyboard },
   props: {
     size: { type: String, default: "primary" },
-    window: { type: Boolean, default: false },
-    hand: { type: Boolean, default: false },
-    float: { type: Boolean, default: false },
+    float: { type: Boolean, default: true },
     all: { type: Boolean, default: false },
     blurHide: { type: Boolean, default: true },
     EnterActiveClass: { type: String, default: "fadeInUp" },
     LeaveActiveClass: { type: String, default: "fadeOutDown" },
-    HandWriteApi: [String]
+    HandWriteApi: [String],
+    pun_keys: { default: () => AllKey.punctuation },
+    num_pun_keys: { default: () => AllKey.num_pun }
   },
   data() {
     return {
-      st: "",
+      keyboardStyle: {},
       show: false,
       input_top: 0,
-      input: "",
-      def_mode: "cn",
+      mode: "cn",
       old_mode: "en_cap",
       main_width: 0,
       main_height: 0,
@@ -237,52 +241,75 @@ export default {
     };
   },
   computed: {
-    number_keys2() {
-      return this.mode === "num" ? AllKey.number2 : AllKey.biaodian;
+    number_keys2(): string[] {
+      return this.mode === "num" ? AllKey.number2 : this.pun_keys;
     },
-    letter_keys() {
+    letter_keys(): string[] {
       return this.mode === "en_cap" ? AllKey.cap_letter : AllKey.letter;
     },
-    cn_list() {
+    cn_list(): string[] {
       return this.cn_list_str ? this.cn_list_str.split("") : [];
     },
-    cut_cn_list() {
+    cut_cn_list(): string[] {
       return this.cn_list.slice(this.l_min, this.l_max);
-    },
-    mode: {
-      get() {
-        return this.def_mode;
-      },
-      set(val) {
-        this.old_mode = this.mode;
-        // console.log(this.hand);
-        if (val == "hand" && !this.hand) return;
-        this.def_mode = val;
-        // console.log(this.def_mode);
-        if (val == "hand") {
-          this.$nextTick(() => {
-            this.main_width = this.$refs["my_keyboard"].offsetWidth;
-            this.main_height = this.$refs["my_keyboard"].offsetHeight;
-          });
-        }
-        // this.$emit("set_mode", val);
+    }
+  },
+  watch: {
+    mode(val, oldVal) {
+      this.old_mode = oldVal;
+      if (val == "hand") {
+        this.$nextTick(() => {
+          let element = this.$refs["my_keyboard"] as HTMLLIElement;
+          this.main_width = element.offsetWidth;
+          this.main_height = element.offsetHeight;
+        });
       }
     }
   },
   methods: {
+    /**监控dom变化，注册键盘弹出事件 */
+    initMutationObserver() {
+      let mutationObserver = new MutationObserver((mutations, observer) => {
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach(addedNode => {
+            if (addedNode.nodeName == "INPUT") {
+              this.addInputEventListener(addedNode as HTMLInputElement);
+            }
+          });
+        });
+      });
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false,
+        attributeOldValue: false,
+        characterDataOldValue: false
+      });
+    },
     /**重新注册所有input标签 */
     sign_up_keyboard() {
-      const _this = this;
       //每个input添加事件
       let inputAll = document.querySelectorAll("input");
       inputAll.forEach(input => {
-        if (_this.all || input.dataset.mode) {
-          input.addEventListener("focus", _this.show_keyboard);
-          if (_this.blurHide) {
-            input.addEventListener("blur", _this.hide_keyboard);
-          }
-        }
+        this.addInputEventListener(input);
       });
+    },
+    /**清理注册事件 */
+    clean_sign_up() {
+      let inputAll = document.querySelectorAll("input");
+      inputAll.forEach(input => {
+        input.removeEventListener("focus", _show_keyboard);
+        input.removeEventListener("blur", _hide_keyboard);
+      });
+    },
+    addInputEventListener(input: HTMLInputElement) {
+      if (this.all || input.dataset.mode) {
+        input.addEventListener("focus", _show_keyboard);
+        if (this.blurHide) {
+          input.addEventListener("blur", _hide_keyboard);
+        }
+      }
     },
     /**
      * 往上查找计算父元素的zoom
@@ -290,22 +317,21 @@ export default {
      * zoom：计算的放大倍数
      * isThisParent：是否已经到达本控件所在的层级的父级
      */
-    getZoom(dom, zoom = 1, isThisParent = false) {
+    getZoom(dom: HTMLElement, zoom: number = 1): number {
       //当前dom的zoom
       let m_zoom =
-        dom.style.zoom || window.getComputedStyle(dom, null).zoom || 1;
-      zoom = zoom * m_zoom;
+        dom.style.zoom || window.getComputedStyle(dom, null).zoom || "1";
+      zoom = zoom * parseFloat(m_zoom);
 
-      if (!isThisParent) {
-        let children = dom.children;
-        for (let i = 0; i < children.length; i++) {
-          if (this.$el == children[i]) {
-            isThisParent = true;
-            continue;
-          }
+      let isThisParent = false;
+      let children = dom.children;
+      for (let i = 0; i < children.length; i++) {
+        if (this.$el == children[i]) {
+          isThisParent = true;
+          continue;
         }
       }
-      // console.log(dom);
+      //到达最上级
       if (dom.parentNode == document) {
         return zoom;
       }
@@ -315,64 +341,82 @@ export default {
           dom.style.position || window.getComputedStyle(dom, null).position;
         if (position == "relative") return zoom;
       }
-      return this.getZoom(dom.parentNode, zoom);
-    },
-    /**注册显示键盘事件 */
-    show_keyboard(e) {
-      this.input = e.target;
-      this.show = true;
-      this.mode = e.target.dataset.mode;
-      if (this.input && this.float) {
-        let bound = this.input.getBoundingClientRect();
-        let toptop = document.documentElement.scrollTop;
-        //当css设置了zoom时
-        let zoom = this.getZoom(this.input);
 
-        let st_top = (bound.y + bound.height + 10 + toptop) * zoom;
-        // console.log(bound);
-        this.st = {
-          position: "absolute",
-          left: "0",
-          "z-index": "10",
-          top: st_top + "px"
-        };
+      return this.getZoom(dom.parentNode as HTMLElement, zoom);
+    },
+    /**设置键盘位置 */
+    SetKeyboardPosition() {
+      let bound = inputElement.getBoundingClientRect();
+      let toptop = document.documentElement.scrollTop;
+      //当css设置了zoom时
+      let zoom = this.getZoom(inputElement);
+      // console.log(zoom);
+
+      let st_top = (bound.y + bound.height + 10 + toptop) * zoom;
+      // console.log(bound);
+      this.keyboardStyle = {
+        position: "absolute",
+        left: "0",
+        "z-index": "99999",
+        top: st_top + "px"
+      };
+    },
+    /**显示键盘 */
+    show_keyboard(event: FocusEvent) {
+      // console.log("show");
+      if (!event.target) {
+        return;
+      }
+      inputElement = event.target as HTMLInputElement;
+      this.show = true;
+      if (inputElement.dataset.mode) {
+        this.mode = inputElement.dataset.mode;
+      }
+      if (inputElement && this.float) {
+        this.SetKeyboardPosition();
       }
     },
-    /**注册隐藏键盘事件 */
-    hide_keyboard(e) {
+    /**隐藏键盘 */
+    hide_keyboard(event: FocusEvent) {
+      // console.log("hide");
+      let element = event.relatedTarget as HTMLElement;
       if (
-        (this.all && e.relatedTarget && e.relatedTarget.tagName == "INPUT") ||
-        (e.relatedTarget && e.relatedTarget.dataset.mode)
-      )
-        return;
-      this.show = false;
+        !element ||
+        element.tagName != "INPUT" ||
+        (!this.all && !element.dataset.mode)
+      ) {
+        this.show = false;
+      }
     },
     /**重新初始化一下canvas的位置信息 */
     UpdateBound() {
-      this.$refs.paint && this.$refs.paint.UpdateBound();
+      this.$nextTick(() => {
+        let paint = this.$refs.paint as Vue;
+        paint && paint.$emit("UpdateBound");
+      });
     },
-    HideKey(e) {
+    HideKey() {
       this.show = false;
-      this.input.blur();
+      inputElement.blur();
     },
-    mousedown(e) {
-      // console.log(this.input);
-      e.preventDefault();
+    mousedown(event: MouseEvent) {
+      // console.log(inputElement);
+      event.preventDefault();
     },
     /**手写选择文字*/
-    HandText(text) {
-      if (this.input !== document.activeElement) return;
-      let index = this.input.selectionStart;
-      this.input.value = this.insertString(this.input.value, text, index);
+    HandText(text: string) {
+      if (inputElement !== document.activeElement) return;
+      let index = inputElement.selectionStart || 0;
+      inputElement.value = this.insertString(inputElement.value, text, index);
       this.TheEnd(index + 1);
       //触发input事件
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }));
     },
     //点击按钮
-    clickKey(e, key, pass) {
-      if (this.input !== document.activeElement) return;
-      let index = this.input.selectionStart;
-      e.preventDefault();
+    clickKey(event: Event, key: string, pass: boolean) {
+      if (inputElement !== document.activeElement) return;
+      let index = inputElement.selectionStart || 0;
+      event.preventDefault();
       if (this.mode === "cn" && !pass) {
         this.cn_input += key;
         this.l_min = 0;
@@ -388,43 +432,43 @@ export default {
             ? keys.reduce((a, b) => a + dict[b], "")
             : dict[keys[0]]; //dict[this.cn_input];
       } else {
-        // this.input.value += key;
-        this.input.value = this.insertString(this.input.value, key, index);
+        // inputElement.value += key;
+        inputElement.value = this.insertString(inputElement.value, key, index);
         this.TheEnd(index + 1);
       }
       //触发input事件
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }));
     },
-    clickNumber(e, key) {
-      if (this.input !== document.activeElement) return;
-      let index = this.input.selectionStart;
-      e.preventDefault();
+    clickNumber(event: Event, key: string) {
+      if (inputElement !== document.activeElement) return;
+      let index = inputElement.selectionStart || 0;
+      event.preventDefault();
       if (this.mode === "cn" && this.cn_input !== "") {
-        this.input.value += this.cut_cn_list[parseInt(key) - 1];
+        inputElement.value += this.cut_cn_list[parseInt(key) - 1];
         this.cn_input = "";
         this.cn_list_str = "";
       } else {
-        // this.input.value += key;
-        this.input.value = this.insertString(this.input.value, key, index);
+        // inputElement.value += key;
+        inputElement.value = this.insertString(inputElement.value, key, index);
         this.TheEnd(index + 1);
       }
       //触发input事件
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }));
     },
-    clickCN(e, text) {
-      let index = this.input.selectionStart;
-      e.preventDefault();
-      // this.input.value += text;
-      this.input.value = this.insertString(this.input.value, text, index);
+    clickCN(event: Event, text: string) {
+      let index = inputElement.selectionStart || 0;
+      event.preventDefault();
+      // inputElement.value += text;
+      inputElement.value = this.insertString(inputElement.value, text, index);
       this.cn_input = "";
       this.cn_list_str = "";
       //触发input事件
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }));
       this.TheEnd(index + 1);
     },
     del() {
-      if (this.input !== document.activeElement) return;
-      let index = this.input.selectionStart;
+      if (inputElement !== document.activeElement) return;
+      let index = inputElement.selectionStart || 0;
       if (this.mode === "cn" && this.cn_input !== "") {
         this.cn_input = this.delStringLast(
           this.cn_input,
@@ -434,29 +478,29 @@ export default {
         this.l_max = 10;
         this.cn_list_str = dict[this.cn_input];
       } else {
-        this.input.value = this.delStringLast(this.input.value, index - 1);
+        inputElement.value = this.delStringLast(inputElement.value, index - 1);
         this.TheEnd(index - 1);
       }
       //触发input事件
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }));
     },
     /**字符串插入文字 */
-    insertString(text, input, index) {
+    insertString(text: string, input: string, index: number) {
       let arrText = text.split("");
       arrText.splice(index, 0, input);
       return arrText.join("");
     },
     /**删除字符串的某个字符*/
-    delStringLast(text, index) {
+    delStringLast(text: string, index: number) {
       let arrText = text.split("");
       arrText[index] = "";
       // arrText.pop();
       return arrText.join("");
     },
     /**光标归位*/
-    TheEnd(index) {
-      this.input.selectionStart = index;
-      this.input.selectionEnd = index;
+    TheEnd(index: number) {
+      inputElement.selectionStart = index;
+      inputElement.selectionEnd = index;
     },
     cap_change() {
       if (this.mode !== "cn") {
@@ -490,7 +534,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 
@@ -613,21 +657,19 @@ i {
       //   margin-left: 28px;
       // }
     }
-    .number-box {
-      // width: $number-width * 3 + $key-left * 2;
+    .all-pun-box,
+    .pun-box,
+    .number-box,
+    .del-box {
       display: inline-block;
       vertical-align: middle;
     }
-    .del-box {
-      // width: $number-width + $key-left * 2;
-      display: inline-block;
-      vertical-align: middle;
+
+    .del-box,
+    .pun-box {
       .key {
         margin-left: 0px;
       }
-      // .key_hide{
-      //   width: $number-width;
-      // }
     }
     .hand-left-box {
       width: 150px;
@@ -645,11 +687,8 @@ i {
     .number {
       // width: $number-width;
       height: 80px;
-      font-size: 60px;
+      font-size: 54px;
       line-height: 80px;
-      &:nth-last-of-type(3n) {
-        margin-left: 0px;
-      }
     }
     .cap_change {
       width: 140px;
@@ -663,13 +702,13 @@ i {
       background: #d6d1d0;
       width: 140px;
       > .jp {
-        height: 60px;
+        height: 55px;
         display: inline-block;
         vertical-align: middle;
       }
       > span {
-        padding-left: 10px;
-        font-size: 20px;
+        padding-left: 5px;
+        font-size: 16px;
         line-height: 18px;
         display: inline-block;
         vertical-align: middle;

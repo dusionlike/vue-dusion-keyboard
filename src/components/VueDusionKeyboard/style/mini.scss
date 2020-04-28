@@ -1,0 +1,65 @@
+.my-keyboard__mini {
+  $p-min-width:1080px;
+  $p-key-width:90px;
+  $p-number-width:160px;
+  $p-key-left:16px;
+  $p-sp-width:338px;
+  $p-del-left:16px;
+    min-width: $p-min-width;
+    .pinyin,
+    .select-list {
+      > div {
+        width: $p-min-width;
+      }
+    }
+    .main-keyboard {
+      .key {
+        width: $p-key-width;
+        & + .key {
+          margin-left: $p-key-left;
+        }
+      }
+      .number-box {
+        width: $p-number-width * 3 + $p-key-left * 2;
+        & .number:nth-of-type(3n+1) {
+            margin-left: 0px;
+          }
+      }
+      .del-box,.pun-box {
+        width: $p-number-width * 2 / 3;
+        .number{
+          width: $p-number-width * 2 / 3;
+          font-size: 38px;
+        }
+      }
+      .all-pun-box{
+        width: $p-number-width * 3 + $p-key-left * 2;
+        .number{
+          width: $p-number-width * 2 / 3;
+        }
+        & .number:nth-of-type(4n+1) {
+          margin-left: 0px;
+        }
+      }
+      .del-box{
+        margin-left: $p-del-left;
+      }
+      .pun-box{
+        margin-right: $p-del-left;
+      }
+      .number {
+        width: $p-number-width;
+      }
+      .space {
+        width: $p-sp-width;
+      }
+    }
+  }
+  .keyboard-paint__mini {
+    $p-td-width:90px;
+    .result-table {
+      td {
+        width: $p-td-width;
+      }
+    }
+  }

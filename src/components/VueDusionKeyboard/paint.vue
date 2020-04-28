@@ -22,45 +22,68 @@
   </div>
 </template>
 
-<script>
-import getHandWrite from "./handWrite/index";
+<script lang="ts">
+import Vue from "vue";
+import { getHandWrite, HandWrite } from "./handWrite";
 
-export default {
+let handWrite: HandWrite;
+let canvas: HTMLCanvasElement;
+let ctx: CanvasRenderingContext2D;
+
+interface DataOps {
+  handWrite: string;
+  write_result_temp: [string[], string[], string[], string[]];
+  isClick: boolean;
+  //轨迹X
+  clickX: number[];
+  //轨迹Y
+  clickY: number[];
+  //轨迹标志位，为1则是终点
+  clickC: number[];
+  X: number;
+  Y: number;
+  old_X: number;
+  old_Y: number;
+  timer: number;
+}
+
+export default Vue.extend({
+  name: "paint",
   mounted() {
-    this.handWrite = getHandWrite(this.HandWriteApi);
+    handWrite = getHandWrite(this.HandWriteApi);
     // console.log(this.HandWriteApi);
-    this.handWrite.createLib(this.lib);
-    let _this = this;
+    handWrite.createLib(this.lib).catch(err=>{
+      console.error(err);
+      
+    })
     this.$nextTick(() => {
-      _this.ctx = _this.$refs.canvas.getContext("2d");
-      // console.log(_this.ctx);
-
-      _this.Reload();
-      _this.UpdateBound();
-      // window.onscroll = _this.UpdateBound
-      window.addEventListener("scroll", _this.UpdateBound);
+      canvas = this.$refs.canvas as HTMLCanvasElement;
+      ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+      this.Reload();
+      this.UpdateBound();
+      window.addEventListener("scroll", this.UpdateBound.bind(this));
+      this.$on("UpdateBound", this.UpdateBound.bind(this));
     });
     this.write_result = [];
-    // console.log(this.write_result);
   },
   beforeDestroy() {
     //清除监听
-    window.removeEventListener("scroll", this.UpdateBound);
+    window.removeEventListener("scroll", this.UpdateBound.bind(this));
   },
   props: {
-    size:String,
-    p_width: [String, Number],
-    p_height: [String, Number],
+    size: String,
+    p_width: Number,
+    p_height: Number,
     lib: {
       type: String,
       default: "CN"
     },
     HandWriteApi: [String]
   },
-  data() {
+  data(): DataOps {
     return {
       handWrite: "",
-      write_result_temp: [],
+      write_result_temp: [[], [], [], []],
       isClick: false,
       //轨迹X
       clickX: [],
@@ -72,16 +95,15 @@ export default {
       Y: 0,
       old_X: 0,
       old_Y: 0,
-      tiemr: 0,
-      ctx: null
+      timer: 0
     };
   },
   computed: {
     write_result: {
-      get() {
+      get(): [string[], string[], string[], string[]] {
         return this.write_result_temp;
       },
-      set(val) {
+      set(val: string[]) {
         let ll = val.length;
         if (ll < 12) {
           for (let i = 0; i < 12 - ll; i++) {
@@ -103,38 +125,49 @@ export default {
   },
   watch: {
     lib(val) {
-      this.handWrite.createLib(val);
+      handWrite.createLib(val);
     }
   },
   methods: {
+    nextTick() {},
     /**更新canvas位置*/
     UpdateBound() {
-      let bound = this.$refs.canvas.getBoundingClientRect();
+      let bound = canvas.getBoundingClientRect();
       this.X = bound.x;
       this.Y = bound.y;
     },
-    Down(e) {
-      let cx = parseInt((e.clientX || e.targetTouches[0].clientX) - this.X);
-      let cy = parseInt((e.clientY || e.targetTouches[0].clientY) - this.Y);
+    Down(ev: TouchEvent | MouseEvent) {
+      let cx = Math.floor(
+        ((ev as MouseEvent).clientX ||
+          (ev as TouchEvent).targetTouches[0].clientX) - this.X
+      );
+      let cy = Math.floor(
+        ((ev as MouseEvent).clientY ||
+          (ev as TouchEvent).targetTouches[0].clientY) - this.Y
+      );
 
       clearTimeout(this.timer);
       this.old_X = cx;
       this.old_Y = cy;
-      let ctx = this.$refs.canvas.getContext("2d");
       ctx.beginPath();
       this.isClick = true;
     },
-    Move(e) {
-      e.preventDefault();
+    Move(ev: TouchEvent | MouseEvent) {
+      ev.preventDefault();
       if (this.isClick) {
-        let cx = parseInt((e.clientX || e.targetTouches[0].clientX) - this.X);
-        let cy = parseInt((e.clientY || e.targetTouches[0].clientY) - this.Y);
+        let cx = Math.floor(
+          ((ev as MouseEvent).clientX ||
+            (ev as TouchEvent).targetTouches[0].clientX) - this.X
+        );
+        let cy = Math.floor(
+          ((ev as MouseEvent).clientY ||
+            (ev as TouchEvent).targetTouches[0].clientY) - this.Y
+        );
 
         this.clickX.push(cx);
         this.clickY.push(cy);
         this.clickC.push(0);
         //画图
-        let ctx = this.$refs.canvas.getContext("2d");
         ctx.strokeStyle = "#000";
         ctx.fillStyle = "#000";
         ctx.lineWidth = 8;
@@ -146,13 +179,12 @@ export default {
         this.old_Y = cy;
       }
     },
-    Mouseup(e) {
+    Mouseup() {
       // console.log("滑动结束");
       if (this.isClick) {
         this.isClick = false;
-        let _this = this;
-        this.timer = setTimeout(() => {
-          _this.Reload();
+        this.timer = window.setTimeout(() => {
+          this.Reload();
         }, 1500);
         //标记最后一点为终点
         this.clickC.pop();
@@ -160,12 +192,11 @@ export default {
         this.GetText();
       }
     },
-    Leave(e) {
+    Leave() {
       if (this.isClick) {
         this.isClick = false;
-        let _this = this;
-        this.timer = setTimeout(() => {
-          _this.Reload();
+        this.timer = window.setTimeout(() => {
+          this.Reload();
         }, 1000);
         //标记最后一点为终点
         this.clickC.pop();
@@ -175,59 +206,53 @@ export default {
     },
     //初始化
     Reload() {
-      if (!this.$refs.canvas) return;
+      if (!canvas) return;
       this.clickX = [];
       this.clickY = [];
       this.clickC = [];
-      let ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, this.p_width, this.p_height);
       ctx.fillStyle = "rgba(238,111,111,0.2)";
       ctx.font = "bold 100px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(
-        "手写区域",
-        this.$refs.canvas.width / 2,
-        this.$refs.canvas.height / 2,
-        [1000]
-      );
+      ctx.fillText("手写区域", canvas.width / 2, canvas.height / 2, 1000);
       ctx.setLineDash([5, 5]);
       ctx.lineWidth = 2;
       ctx.strokeStyle = "#aaa";
       ctx.beginPath();
-      ctx.moveTo(0, this.$refs.canvas.height / 2);
-      ctx.lineTo(this.$refs.canvas.width, this.$refs.canvas.height / 2);
+      ctx.moveTo(0, canvas.height / 2);
+      ctx.lineTo(canvas.width, canvas.height / 2);
       ctx.stroke();
-      ctx.moveTo(this.$refs.canvas.width / 2, 0);
-      ctx.lineTo(this.$refs.canvas.width / 2, this.$refs.canvas.height);
+      ctx.moveTo(canvas.width / 2, 0);
+      ctx.lineTo(canvas.width / 2, canvas.height);
       ctx.stroke();
       ctx.setLineDash([0, 0]);
     },
     //获取文字
     GetText() {
-      this.handWrite
+      handWrite
         .GetWords(this.clickX, this.clickY, this.clickC)
         .then(res => {
-          this.write_result = res.data||res;
+          this.write_result = res;
         })
         .catch(err => {
           console.error(err);
         });
     },
     //选择文字
-    Select(text) {
+    Select(text: string) {
       this.$emit("SelectText", text);
       this.write_result = [];
       this.Reload();
       clearTimeout(this.timer);
     }
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>
-@import './style/primary.scss';
-@import './style/mini.scss';
+@import "./style/primary.scss";
+@import "./style/mini.scss";
 .keyboard-paint {
   display: inline-block;
   vertical-align: middle;
