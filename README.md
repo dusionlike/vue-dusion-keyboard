@@ -100,10 +100,10 @@ window.sign_up_keyboard();
 |sign_up_keyboard|重新注册input显示键盘,当页面有新的input标签出现时调用此方法|event|
 
 ### 更新
-- **v2.0.0**<br>
-1.vue cli改用3.x以上版本
-2.改用typescript编写（非class写法）
-3.新增属性`observer`，监听dom变化，为新增input标签注册键盘弹起事件
-4.标点符号改为16个，可通过属性`pun_keys`替换
-5.数字键盘左侧增加四个标点符号按钮，可通过属性`num_pun_keys`替换
-6.`float`属性默认为true
+#### **v2.0.0**
+- vue cli改用3.x以上版本
+- 改用typescript编写（非class写法）
+- 新增属性`observer`，监听dom变化，为新增input标签注册键盘弹起事件
+- 标点符号改为16个，可通过属性`pun_keys`替换
+- 数字键盘左侧增加四个标点符号按钮，可通过属性`num_pun_keys`替换
+- `float`属性默认为true
