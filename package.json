@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "基于vue.js的web键盘，支持离线模式。",
   "license": "MIT",
-  "main": "dist/VueDusionKeyboard.umd.js",
+  "main": "dist/VueDusionKeyboard.common.js",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
