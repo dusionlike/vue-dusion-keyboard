@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import VueDusionKeyboard from './components/VueDusionKeyboard/index.vue'
+import VueDusionKeyboard from './components/index'
 
-// Vue.use(VueDusionKeyboard)
-Vue.component('VueDusionKeyboard', VueDusionKeyboard)
+Vue.use(VueDusionKeyboard)
+// Vue.component('VueDusionKeyboard', VueDusionKeyboard)
 
 Vue.config.productionTip = false
 

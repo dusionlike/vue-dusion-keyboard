@@ -1,6 +1,6 @@
 {
   "name": "vue-dusion-keyboard",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "基于vue.js的web键盘，支持离线模式。",
   "license": "MIT",
   "main": "dist/VueDusionKeyboard.common.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lib": "vue-cli-service build --modern --target lib --name VueDusionKeyboard src/components/VueDusionKeyboard/index.vue",
+    "lib": "vue-cli-service build --modern --target lib --name VueDusionKeyboard src/components/index.ts",
     "tsc":"tsc --build"
   },
   "files": [

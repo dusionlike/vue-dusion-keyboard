@@ -91,8 +91,8 @@
         <paint
           ref="paint"
           :size="size"
-          :p_width="main_width"
-          :p_height="main_height"
+          :p_width="main_width*0.4"
+          :p_height="main_height-10"
           @SelectText="HandText"
           :lib="handLib"
           :hand-write-api="handWriteApi"
@@ -186,7 +186,7 @@
 import Vue from "vue";
 import AllKey from "./key";
 import dict from "./dist/pinyin_dict_notone";
-import paint from "./paint.vue";
+import paint from "../paint/paint.vue";
 
 import SvgDel from "./svg/svg-del.vue";
 import SvgKeyboard from "./svg/svg-keybord.vue";
@@ -197,7 +197,7 @@ let _hide_keyboard: (ev: FocusEvent) => void;
 let inputElement: HTMLInputElement;
 
 export default Vue.extend({
-  name: "vue-dusion-keyboard",
+  name: "VueDusionKeyboard",
   mounted() {
     _show_keyboard = this.show_keyboard.bind(this);
     _hide_keyboard = this.hide_keyboard.bind(this);

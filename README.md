@@ -10,8 +10,14 @@ npm install vue-dusion-keyboard -S
 ```
 在 main.js 中写入以下内容全局注册：
 ```
+全部注册
 import VueDusionKeyboard from 'vue-dusion-keyboard'
+Vue.use(VueDusionKeyboard)
+
+或者按组件注册
+import {VueDusionKeyboard,Paint} from 'vue-dusion-keyboard'
 Vue.component('VueDusionKeyboard', VueDusionKeyboard)
+Vue.component('Paint', Paint) //可省略
 ```
 
 ### 标签引入
@@ -20,11 +26,7 @@ Vue.component('VueDusionKeyboard', VueDusionKeyboard)
 <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
 <script src="./VueDusionKeyboard.umd.min.js"></script>
 <script>
-new Vue({
-  components: {
-    VueDusionKeyboard: VueDusionKeyboard
-  }
-}).$mount('#app')
+new Vue({}).$mount('#app')
 </script>
 ```
 
@@ -44,11 +46,17 @@ new Vue({
 **对于js动态生成的输入框，vue-dusion-keyboard提供以下两种方法注册**
 - 加入监听属性`observer`。
 ```
-<vue-dusion-keyboard all observer></vue-dusion-keyboard>
+<vue-dusion-keyboard all float observer></vue-dusion-keyboard>
 ```
 - 当有新的input标签生成时，重新调用`sign_up_keyboard`方法注册。
 ```
 window.sign_up_keyboard();
+```
+
+**Paint组件**
+- paint组件为vue-dusion-keyboard内置写字板组件
+```
+<paint hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" @result="result"></paint>
 ```
 ---
 
@@ -86,6 +94,8 @@ ffi安装失败的小伙伴可以安装：
 |**data-mode**|弹出输入法的类型：<br>`en_let` 英文小写<br>`en_cap` 英文大写<br>`cn` 中文<br>`hand` 手写|String|`en_let`<br>`en_cap`<br>`cn`<br>`hand`|`en_let`|
 
 ## 组件属性
+
+**vue-dusion-keyboard:**
 |属性|说明|类型|可选值|默认值|
 |:-:|:-|:-|:-|:-|
 |**all**|是否为所有`input`标签注册弹出输入法|Boolean|true/false|false|
@@ -100,10 +110,31 @@ ffi安装失败的小伙伴可以安装：
 |**pun_keys**|替换标点符号（16个）|Array|略|无
 |**num_pun_keys**|替换数字键盘左侧标点符号（4个）|Array|略|无
 
+**paint:**
+|属性|说明|类型|可选值|默认值|
+|:-:|:-|:-|:-|:-|
+|**show_result**|是否在右侧显示结果|Boolean|true/false|true|
+|**p_width**|画板宽度|number|-|600|
+|**p_height**|画板高度|number|-|400|
+|**lib**|手写识别库|string|CN/EN|CN|
+|**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
+|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
+
 ## 组件方法
+**vue-dusion-keyboard:**
 |方法名|说明|参数|
 |:-:|:-|:-|
 |sign_up_keyboard|重新注册input显示键盘,当页面有新的input标签出现时调用此方法|event|
+**paint:**
+无
+
+## 组件事件
+**vue-dusion-keyboard:**
+无
+**paint:**
+|事件名|说明|参数|
+|:-:|:-|:-|
+|result|手写识别结果|string[]|
 
 ### 更新
 #### **v2.0.0**
@@ -117,3 +148,7 @@ ffi安装失败的小伙伴可以安装：
 #### **v2.1.0**
 - ffi模块如果找不到则会加载ffi-napi，ref同理
 - 新增`dll-path`属性，可自定义手写库的路径
+
+#### **v2.2.0**
+- 改回1.x时Vue.use()的引入方式
+- 可单独导出Paint组件

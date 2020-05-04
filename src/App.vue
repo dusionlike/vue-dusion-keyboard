@@ -19,12 +19,7 @@
     </span>
 
     <!-- <input v-if="show" @focus="$refs.keyboard.show_keyboard" @blur="$refs.keyboard.hide_keyboard" type="text" /> -->
-    <vue-dusion-keyboard
-      v-if="isElectron"
-      :blurHide="false"
-      size="mini"
-      dll-path="plug\\handWrite"
-    ></vue-dusion-keyboard>
+    <vue-dusion-keyboard v-if="isElectron" :blurHide="false" size="mini" dll-path="plug\\handWrite"></vue-dusion-keyboard>
     <vue-dusion-keyboard
       v-else
       :blurHide="false"
@@ -33,14 +28,19 @@
     ></vue-dusion-keyboard>
     <!-- hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" -->
     <button>测试</button>
+
+    <br />
+    <br />
+    <paint hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" @result="result"></paint>
     <!-- <div style="width:400px;height:400px;background:#000;"></div> -->
     <!-- <vue-dusion-keyboard hand float :blurHide="false"></vue-dusion-keyboard> -->
     <!-- :blurHide="false" -->
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+export default Vue.extend({
   name: "app",
   mounted() {
     this.show = true;
@@ -51,8 +51,13 @@ export default {
       show: false,
       isElectron: Boolean(window.require)
     };
+  },
+  methods: {
+    result(res) {
+      console.log(res);
+    }
   }
-};
+});
 </script>
 
 <style lang="scss">

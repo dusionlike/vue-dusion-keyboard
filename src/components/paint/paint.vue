@@ -1,9 +1,9 @@
 <template>
-  <div :class="'keyboard-paint keyboard-paint__'+size" style="margin-top:5px;">
+  <div class="keyboard-paint" style="margin-top:5px;">
     <div class="canvas-box">
       <canvas
-        :width="p_width*0.4"
-        :height="p_height-10"
+        :width="p_width"
+        :height="p_height-4"
         ref="canvas"
         @touchstart="Down"
         @touchmove="Move"
@@ -14,7 +14,7 @@
         @mouseleave="Leave"
       ></canvas>
     </div>
-    <table class="result-table">
+    <table v-if="show_result" :style="tStyle" class="result-table">
       <tr v-for="(item, index) in write_result" :key="index">
         <td @click="Select(text)" v-for="(text, index) in item" :key="index">{{text}}</td>
       </tr>
@@ -45,10 +45,11 @@ interface DataOps {
   old_X: number;
   old_Y: number;
   timer: number;
+  tStyle: any;
 }
 
 export default Vue.extend({
-  name: "paint",
+  name: "Paint",
   mounted() {
     handWrite = getHandWrite(this.handWriteApi || this.dllPath);
     // console.log(this.handWriteApi);
@@ -70,17 +71,16 @@ export default Vue.extend({
     window.removeEventListener("scroll", this.UpdateBound.bind(this));
   },
   props: {
-    size: String,
-    p_width: Number,
-    p_height: Number,
-    lib: {
-      type: String,
-      default: "CN"
-    },
+    show_result: { type: Boolean, default: () => true },
+    p_width: { type: Number, default: () => 600 },
+    p_height: { type: Number, default: () => 400 },
+    lib: { type: String, default: () => "CN" },
     handWriteApi: String,
     dllPath: String
   },
   data(): DataOps {
+    let t_height = this.p_height;
+    let t_width = t_height * (3 / 4);
     return {
       handWrite: "",
       write_result_temp: [[], [], [], []],
@@ -95,7 +95,11 @@ export default Vue.extend({
       Y: 0,
       old_X: 0,
       old_Y: 0,
-      timer: 0
+      timer: 0,
+      tStyle: {
+        height: t_height + "px",
+        width: t_width + "px"
+      }
     };
   },
   computed: {
@@ -234,6 +238,7 @@ export default Vue.extend({
         .GetWords(this.clickX, this.clickY, this.clickC)
         .then(res => {
           this.write_result = res;
+          this.$emit("result", res);
         })
         .catch(err => {
           console.error(err);
@@ -251,8 +256,22 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "./style/primary.scss";
-@import "./style/mini.scss";
+.keyboard-paint__primary {
+  $p-td-width: 110px;
+  .result-table {
+    td {
+      width: $p-td-width;
+    }
+  }
+}
+.keyboard-paint__mini {
+  $p-td-width: 90px;
+  .result-table {
+    td {
+      width: $p-td-width;
+    }
+  }
+}
 .keyboard-paint {
   display: inline-block;
   vertical-align: middle;
@@ -261,18 +280,21 @@ export default Vue.extend({
     vertical-align: middle;
     background: #fff;
     font-size: 0px;
-    #canvas {
+    > canvas {
+      border-radius: 3px;
       border: 1px solid #aaa;
     }
   }
   .result-table {
-    display: inline-block;
+    display: inline-table;
     vertical-align: middle;
     margin-left: 8px;
+    border-spacing: 2px;
     td {
+      border-radius: 3px;
       border: 1px solid #aaa;
       // width: 90px;
-      height: 90px;
+      // height: 90px;
       font-size: 40px;
       font-weight: bold;
       background: #fff;
