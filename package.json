@@ -1,37 +1,39 @@
 {
   "name": "vue-dusion-keyboard",
-  "version": "2.2.0",
+  "version": "2.4.0",
+  "private": false,
   "description": "基于vue.js的web键盘，支持离线模式。",
   "license": "MIT",
   "main": "dist/VueDusionKeyboard.common.js",
-  "private": false,
+  "types": "types/components/index.d.ts",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lib": "vue-cli-service build --modern --target lib --name VueDusionKeyboard src/components/index.ts",
-    "tsc":"tsc --build"
+    "tsc":"tsc --declaration"
   },
-  "files": [
-    "dist"
-  ],
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "element-ui": "^2.4.5",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2"
+  },
+  "devDependencies": {
+    "@types/ffi": "^0.2.3",
+    "@types/ref": "^0.0.28",
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-typescript": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "typescript": "~3.9.3",
+    "vue-cli-plugin-element": "^1.0.1",
+    "vue-template-compiler": "^2.6.11"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dusionlike/vue-dusion-keyboard"
-  },
-  "dependencies": {
-    "core-js": "^3.6.4",
-    "vue": "^2.6.11"
-  },
-  "devDependencies": {
-    "@types/ffi": "^0.2.2",
-    "@types/ref": "^0.0.28",
-    "@vue/cli-plugin-babel": "^4.3.1",
-    "@vue/cli-plugin-typescript": "~4.3.0",
-    "@vue/cli-service": "~4.3.0",
-    "sass": "^1.26.3",
-    "sass-loader": "^8.0.2",
-    "typescript": "~3.8.3",
-    "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",

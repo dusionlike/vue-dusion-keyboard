@@ -10,54 +10,79 @@
     <input type="text" data-mode="num" />
     标点：
     <input type="text" data-mode="biaodian" />
-    空：
-    <input type="text" />
+    textarea：
+    <textarea data-mode="en" cols="30" rows="5"></textarea>
     <br />
     <br />zoom：
-    <span style="zoom:1.6;">
+    <span style="zoom: 1.6">
       <input type="text" data-mode="num" class="zzz" />
     </span>
 
-    <!-- <input v-if="show" @focus="$refs.keyboard.show_keyboard" @blur="$refs.keyboard.hide_keyboard" type="text" /> -->
-    <vue-dusion-keyboard v-if="isElectron" :blurHide="false" size="mini" dll-path="plug\\handWrite"></vue-dusion-keyboard>
-    <vue-dusion-keyboard
-      v-else
+    <!-- <vue-dusion-keyboard
+      v-if="isElectron"
       :blurHide="false"
       size="mini"
-      hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words"
+    ></vue-dusion-keyboard> -->
+    <vue-dusion-keyboard
+    :blurHide="false"
+      :float="false"
+      @keyvalue="kkk"
     ></vue-dusion-keyboard>
-    <!-- hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" -->
-    <button>测试</button>
+    <br />
+    <br />
+    <el-form inlin>
+      <el-form-item>
+        <el-button type="primary" @click="OpenDialog">显示dialog</el-button>
+      </el-form-item>
+    </el-form>
 
-    <br />
-    <br />
-    <paint hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" @result="result"></paint>
-    <!-- <div style="width:400px;height:400px;background:#000;"></div> -->
-    <!-- <vue-dusion-keyboard hand float :blurHide="false"></vue-dusion-keyboard> -->
-    <!-- :blurHide="false" -->
+    <paint @result="result"></paint>
+    <el-dialog
+      title="测试"
+      :visible.sync="dialogShow"
+      width="30%"
+      @close="dialogShow = false"
+    >
+      <el-input
+        ref="dialogInput"
+        v-model="inputVal"
+        placeholder="动态生成的input"
+      ></el-input>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  name: "app",
-  mounted() {
-    this.show = true;
-  },
-  data() {
-    return {
-      msg: "Welcome to Your Vue.js App",
-      show: false,
-      isElectron: Boolean(window.require)
-    };
-  },
-  methods: {
-    result(res) {
-      console.log(res);
-    }
+import { Vue, Component, Ref } from "vue-property-decorator";
+import { ElInput } from "element-ui/types/input";
+
+@Component
+export default class App extends Vue {
+  show = false;
+  isElectron = Boolean(window.require);
+  dialogShow = false;
+
+  inputVal = "";
+
+  @Ref("dialogInput") dialogInput!: ElInput;
+
+  OpenDialog() {
+    this.dialogShow = true;
+    this.$nextTick(() => {
+      // console.log(this.dialogInput);
+      setTimeout(() => {
+        this.dialogInput.focus();
+      }, 200);
+    });
   }
-});
+
+  result(res: any) {
+    console.log(res);
+  }
+  kkk(kk: string) {
+    console.log(kk);
+  }
+}
 </script>
 
 <style lang="scss">

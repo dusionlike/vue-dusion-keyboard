@@ -10,9 +10,12 @@ npm install vue-dusion-keyboard -S
 ```
 在 main.js 中写入以下内容全局注册：
 ```
-全部注册
+全局注册
 import VueDusionKeyboard from 'vue-dusion-keyboard'
 Vue.use(VueDusionKeyboard)
+
+全局注册手写库地址
+Vue.use(VueDusionKeyboard,{handWriteApi:''})
 
 或者按组件注册
 import {VueDusionKeyboard,Paint} from 'vue-dusion-keyboard'
@@ -63,7 +66,8 @@ window.sign_up_keyboard();
 ## 模式
 
 ### 离线模式
-组件默认为离线模式，离线模式需要运行在[electron](https://electronjs.org)环境下，所需的控件有：
+#### 版权问题暂不提供
+<!-- 组件默认为离线模式，离线模式需要运行在[electron](https://electronjs.org)环境下，所需的控件有：
 ##### nodejs模块:
 - `ffi`
 - `ref`
@@ -78,7 +82,7 @@ ffi安装失败的小伙伴可以安装：
 - `hz.mrd` : 中文字库，放置在`XDLL.dll`同目录下。
 - `English.mrd` : 英文字库，放置在`XDLL.dll`同目录下。
 
-```以上文件可加qq751069244索取```
+```以上文件可加qq751069244索取``` -->
 
 ### 互联网模式
 组件上添加`hand-write-api`属性即可切换互联网模式，可以直接运行在浏览器中
@@ -130,25 +134,16 @@ ffi安装失败的小伙伴可以安装：
 
 ## 组件事件
 **vue-dusion-keyboard:**
-无
+|事件名|说明|参数|
+|:-:|:-|:-|
+|keyvalue|键盘输入事件|string|
 **paint:**
 |事件名|说明|参数|
 |:-:|:-|:-|
 |result|手写识别结果|string[]|
 
-### 更新
-#### **v2.0.0**
-- vue cli改用3.x以上版本
-- 改用typescript编写（非class写法）
-- 新增属性`observer`，监听dom变化，为新增input标签注册键盘弹起事件
-- 标点符号改为16个，可通过属性`pun_keys`替换
-- 数字键盘左侧增加四个标点符号按钮，可通过属性`num_pun_keys`替换
-- `float`属性默认为true
-
-#### **v2.1.0**
-- ffi模块如果找不到则会加载ffi-napi，ref同理
-- 新增`dll-path`属性，可自定义手写库的路径
-
-#### **v2.2.0**
-- 改回1.x时Vue.use()的引入方式
-- 可单独导出Paint组件
+## 更新日志
+#### v2.4.0
+- 改为calss components写法
+- 增加全局注册请求地址的方法
+- 增加keyvalue事件

@@ -1,11 +1,19 @@
 import WebHandWrite from "./web";
 import LocalHandWrite from "./electron";
+import { HWOption } from '@/components';
 
-export function getHandWrite(path?: string): HandWrite {
-    if (/^http/g.test(path)) {
-        return new WebHandWrite(path)
+let hwOption: HWOption
+
+export function SET_API_PATH(option: HWOption) {
+    hwOption = option
+}
+
+export function getHandWrite(option?: HWOption): HandWrite {
+    option = option || hwOption || {}
+    if (option.handWriteApi) {
+        return new WebHandWrite(option.handWriteApi)
     } else {
-        return new LocalHandWrite(path)
+        return new LocalHandWrite(option.dllPath)
     }
 }
 
