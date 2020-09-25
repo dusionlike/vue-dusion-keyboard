@@ -1364,10 +1364,13 @@ defineIterator(String, 'String', function (iterated) {
 /* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("d3b7");
 /* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("25f0");
-/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("d4ec");
-/* harmony import */ var F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("bee2");
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("e6cf");
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("25f0");
+/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("d4ec");
+/* harmony import */ var F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("bee2");
+
 
 
 
@@ -1378,7 +1381,7 @@ var LocalHandWrite = /*#__PURE__*/function () {
   function LocalHandWrite() {
     var basePath = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'plug\\handWrite\\';
 
-    Object(F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(this, LocalHandWrite);
+    Object(F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(this, LocalHandWrite);
 
     if (!window.require) {
       throw new Error("手写模块已关闭，请在electron环境下运行");
@@ -1421,7 +1424,7 @@ var LocalHandWrite = /*#__PURE__*/function () {
   /**装载字体库 */
 
 
-  Object(F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(LocalHandWrite, [{
+  Object(F_git_vue_dusion_keyboard_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(LocalHandWrite, [{
     key: "createLib",
     value: function createLib(lib) {
       return new Promise(function (success, fail) {
@@ -8034,7 +8037,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5b43932e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/index.vue?vue&type=template&id=3c624be5&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"ab86c8a6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/index.vue?vue&type=template&id=3c624be5&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"enter-active-class":'animated faster ' + _vm.EnterActiveClass,"leave-active-class":'animated faster ' + _vm.LeaveActiveClass}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.show),expression:"show"}],ref:"my_keyboard",class:'my-keyboard my-keyboard__' + _vm.size,style:(_vm.keyboardStyle),on:{"mousedown":function($event){$event.preventDefault();}}},[(_vm.mode === 'cn')?_c('div',{staticClass:"pinyin"},[_c('div',[_c('span',[_vm._v(_vm._s(_vm.cn_input))])])]):_vm._e(),(_vm.mode === 'cn')?_c('div',{staticClass:"select-list"},[_c('div',[_vm._l((_vm.cut_cn_list),function(text,index){return _c('span',{key:index,staticClass:"select-text",on:{"click":function (e) { return _vm.clickCN(e, text); }}},[_vm._v(_vm._s(index + 1 + "." + text))])}),_c('div',{staticClass:"page"},[_c('p',{staticClass:"previous",on:{"click":_vm.previous_page}},[_vm._v("v")]),_c('p',{staticClass:"next",on:{"click":_vm.next_page}},[_vm._v("v")])])],2)]):_vm._e(),(_vm.mode === 'num' || _vm.mode === 'biaodian')?_c('div',{staticClass:"main-keyboard"},[(_vm.mode === 'num')?_c('div',{staticClass:"pun-box"},_vm._l((_vm.num_pun_keys),function(key,index){return _c('span',{key:index,staticClass:"key number",staticStyle:{"margin-left":"0px"},on:{"click":function (e) { return _vm.clickNumber(e, key); }}},[_vm._v(_vm._s(key))])}),0):_vm._e(),(_vm.mode === 'biaodian')?_c('div',{staticClass:"all-pun-box"},_vm._l((_vm.number_keys2),function(key,index){return _c('span',{key:index,staticClass:"key number",on:{"click":function (e) { return _vm.clickNumber(e, key); }}},[_vm._v(_vm._s(key))])}),0):_vm._e(),(_vm.mode === 'num')?_c('div',{staticClass:"number-box"},_vm._l((_vm.number_keys2),function(key,index){return _c('span',{key:index,staticClass:"key number",on:{"click":function (e) { return _vm.clickNumber(e, key); }}},[_vm._v(_vm._s(key))])}),0):_vm._e(),_c('div',{staticClass:"del-box"},[_c('span',{staticClass:"key number num-del",on:{"click":_vm.del}},[_c('svg-del',{staticClass:"del"})],1),_c('span',{staticClass:"key number blue",on:{"click":function($event){_vm.mode = 'en_cap'}}},[_vm._v("中/英")]),_c('span',{staticClass:"key key_hide number",staticStyle:{"margin-left":"0px"},on:{"click":_vm.HideKey}},[_c('svg-keyboard',{staticClass:"jp"}),_c('span',[_vm._v(" 隐藏 "),_c('br'),_c('i',{staticStyle:{"display":"block","transform":"scaleX(2)"}},[_vm._v("v")])])],1),_c('span',{staticClass:"key number blue",on:{"click":_vm.Fanhui}},[_vm._v("返回")])])]):(_vm.mode === 'hand' && _vm.main_width)?_c('div',{staticClass:"main-keyboard"},[_c('div',{staticClass:"hand-left-box"},[_c('span',{staticClass:"key",on:{"click":function (e) { return _vm.clickKey(e, '，', true); }}},[_vm._v("，")]),_c('span',{staticClass:"key",on:{"click":function (e) { return _vm.clickKey(e, '。', true); }}},[_vm._v("。")]),_c('span',{staticClass:"key",on:{"click":function (e) { return _vm.clickKey(e, '.', true); }}},[_vm._v(".")]),(_vm.handLib === 'CN')?_c('span',{staticClass:"key blue",staticStyle:{"background":"#728fa8"}},[_vm._v("已选择中文")]):_c('span',{staticClass:"key blue",on:{"click":function($event){_vm.handLib = 'CN'}}},[_vm._v("中")]),(_vm.handLib === 'EN')?_c('span',{staticClass:"key blue",staticStyle:{"background":"#728fa8"}},[_vm._v("已选择英文")]):_c('span',{staticClass:"key blue",on:{"click":function($event){_vm.handLib = 'EN'}}},[_vm._v("英")])]),_c('paint',{ref:"paintCom",attrs:{"size":_vm.size,"p_width":_vm.main_width * 0.4,"p_height":_vm.main_height - 10,"lib":_vm.handLib,"handWriteApi":_vm.handWriteApi,"dllPath":_vm.dllPath},on:{"SelectText":_vm.HandText}}),_c('div',{staticClass:"hand-left-box"},[_c('span',{staticClass:"key hand-del",on:{"click":_vm.del}},[_c('svg-del',{staticClass:"del"})],1),_c('span',{staticClass:"key key_hide",on:{"click":_vm.HideKey}},[_c('svg-keyboard',{staticClass:"jp"}),_c('span',[_vm._v(" 隐藏 "),_c('br'),_c('i',{staticStyle:{"display":"block","transform":"scaleX(2)"}},[_vm._v("v")])])],1),_c('span',{staticClass:"key blue",on:{"click":function($event){_vm.mode = 'biaodian'}}},[_vm._v("标点")]),_c('span',{staticClass:"key blue",on:{"click":function($event){_vm.mode = 'num'}}},[_vm._v("数字")]),_c('span',{staticClass:"key blue",on:{"click":function($event){_vm.mode = 'en_cap'}}},[_vm._v("键盘")])])],1):_c('div',{staticClass:"main-keyboard"},[_vm._l((_vm.number_keys),function(key,index){return _c('span',{key:index + 50,staticClass:"key",on:{"click":function (e) { return _vm.clickNumber(e, key); }}},[_vm._v(_vm._s(key))])}),_c('br'),_vm._l((_vm.letter_keys.slice(0, 10)),function(key,index){return _c('span',{key:index + 11,staticClass:"key letter",on:{"click":function (e) { return _vm.clickKey(e, key); }}},[_vm._v(_vm._s(key))])}),_c('br'),_vm._l((_vm.letter_keys.slice(10, 19)),function(key,index){return _c('span',{key:index + 21,staticClass:"key letter",on:{"click":function (e) { return _vm.clickKey(e, key); }}},[_vm._v(_vm._s(key))])}),_c('br'),(_vm.mode === 'cn' || _vm.mode === 'en_cap')?_c('span',{staticClass:"key cap_change",staticStyle:{"background":"#728fa8"},on:{"click":_vm.cap_change}},[_vm._v(_vm._s(_vm.mode === "cn" ? "" : "已锁定大写"))]):_c('span',{staticClass:"key cap_change",on:{"click":_vm.cap_change}},[_vm._v("切换大写")]),_vm._l((_vm.letter_keys.slice(19, 26)),function(key,index){return _c('span',{key:index + 31,staticClass:"key letter",on:{"click":function (e) { return _vm.clickKey(e, key); }}},[_vm._v(_vm._s(key))])}),_c('span',{staticClass:"key key_hide",on:{"click":_vm.HideKey}},[_c('svg-keyboard',{staticClass:"jp"}),_c('span',[_vm._v(" 隐藏 "),_c('br'),_c('i',{staticStyle:{"display":"block","transform":"scaleX(2)"}},[_vm._v("v")])])],1),_c('br'),(_vm.mode === 'cn')?_c('span',{staticClass:"key blue",on:{"click":_vm.cn_change}},[_vm._v(" 中 / "),_c('i',{staticStyle:{"font-size":"16px","font-weight":"500"}},[_vm._v("英")])]):_c('span',{staticClass:"key blue",on:{"click":_vm.cn_change}},[_vm._v(" 英 / "),_c('i',{staticStyle:{"font-size":"16px","font-weight":"500"}},[_vm._v("中")])]),_c('span',{staticClass:"key red",on:{"click":function($event){_vm.mode = 'hand'}}},[_vm._v("手写")]),_c('span',{staticClass:"key blue",on:{"click":_vm.num_change}},[_vm._v("数字")]),_c('span',{staticClass:"key blue",on:{"click":_vm.bd_change}},[_vm._v("标点")]),_c('span',{staticClass:"key",on:{"click":function (e) { return _vm.clickKey(e, '.', true); }}},[_vm._v(".")]),_c('span',{staticClass:"key space",on:{"click":function (e) { return _vm.clickKey(e, ' ', true); }}},[_vm._v("空格")]),_c('span',{staticClass:"key def-del",staticStyle:{"width":"140px"},on:{"click":function($event){return _vm.del()}}},[_c('svg-del',{staticClass:"del"})],1)],2)])])}
 var staticRenderFns = []
 
@@ -8544,7 +8547,7 @@ var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpac
 
 // CONCATENATED MODULE: ./node_modules/vue-class-component/dist/vue-class-component.esm.js
 /**
-  * vue-class-component v7.2.3
+  * vue-class-component v7.2.6
   * (c) 2015-present Evan You
   * @license MIT
   */
@@ -8688,17 +8691,15 @@ function collectDataFromConstructor(vm, Component) {
     }
 
     keys.forEach(function (key) {
-      if (key.charAt(0) !== '_') {
-        Object.defineProperty(_this, key, {
-          get: function get() {
-            return vm[key];
-          },
-          set: function set(value) {
-            vm[key] = value;
-          },
-          configurable: true
-        });
-      }
+      Object.defineProperty(_this, key, {
+        get: function get() {
+          return vm[key];
+        },
+        set: function set(value) {
+          vm[key] = value;
+        },
+        configurable: true
+      });
     });
   }; // should be acquired class property values
 
@@ -9561,7 +9562,7 @@ function isPromise(obj) {
   "dia": "嗲",
   "nou": "耨"
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5b43932e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/svg/svg-del.vue?vue&type=template&id=cda9dea0&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"ab86c8a6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/svg/svg-del.vue?vue&type=template&id=cda9dea0&
 var svg_delvue_type_template_id_cda9dea0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('svg',{attrs:{"viewBox":"0 0 1024 1024","xmlns":"http://www.w3.org/2000/svg","width":"60","height":"60"}},[_c('path',{attrs:{"d":"M938.8 227.7H284.6L0.1 511.3l284.4 284.4v0.8h654.2c47.1 0 85.3-38.2 85.3-85.3V313c0.1-47.1-38.1-85.3-85.2-85.3z m-172.1 385l-40.2 40.2-100.6-100.6-100.6 100.6-40.2-40.2 100.6-100.6-100.6-100.5 40.2-40.2L625.9 472l100.6-100.6 40.2 40.2-100.6 100.5 100.6 100.6z"}})])}
 var svg_delvue_type_template_id_cda9dea0_staticRenderFns = []
 
@@ -9695,7 +9696,7 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var svg_del = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5b43932e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/svg/svg-keybord.vue?vue&type=template&id=481f78d4&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"ab86c8a6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VueDusionKeyboard/svg/svg-keybord.vue?vue&type=template&id=481f78d4&
 var svg_keybordvue_type_template_id_481f78d4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('svg',{attrs:{"viewBox":"0 0 1024 1024","xmlns":"http://www.w3.org/2000/svg"}},[_c('path',{attrs:{"d":"M390.94044445 560.84859262h97.39377777V463.45481485H390.94044445v97.39377777zM560.24177778 317.81925929H463.75822222v97.39377778h97.39377778V317.81925929z m-145.63555556 0H318.12266667v97.39377778h97.39377778V317.81925929z m291.27111111 0H609.39377778v97.39377778h97.39377777V317.81925929zM536.576 560.84859262h97.39377778V463.45481485H536.576v97.39377777zM268.97066667 317.81925929H172.48711111v97.39377778h97.39377778V317.81925929z m486.05866666 97.39377778h97.39377778V317.81925929H755.02933333v97.39377778z m145.63555556-243.02933334H123.33511111c-53.70311111 0-97.39377778 43.69066667-97.39377778 97.39377778V754.72592595c0 53.70311111 43.69066667 97.39377778 97.39377778 97.39377778h776.41955556c53.70311111 0 97.39377778-43.69066667 97.39377778-97.39377778V269.57748151c0-53.70311111-43.69066667-97.39377778-96.48355556-97.39377778z m48.24177778 582.54222222c0 26.39644445-21.84533333 48.24177778-48.24177778 48.24177778H123.33511111c-26.39644445 0-48.24177778-21.84533333-48.24177778-48.24177778V269.57748151c0-26.39644445 21.84533333-48.24177778 48.24177778-48.24177778h776.41955556c26.39644445 0 48.24177778 21.84533333 48.24177778 48.24177778l0.91022222 485.14844444zM682.21155555 560.84859262h97.39377778V463.45481485H682.21155555v97.39377777z m-388.66488888 145.63555556h436.90666666V609.0903704H293.54666667v97.39377778zM341.78844445 463.45481485H245.30488889v97.39377777h97.39377778V463.45481485z"}})])}
 var svg_keybordvue_type_template_id_481f78d4_staticRenderFns = []
 
@@ -9729,18 +9730,18 @@ var svg_keybord_component = normalizeComponent(
 )
 
 /* harmony default export */ var svg_keybord = (svg_keybord_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5b43932e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/paint/paint.vue?vue&type=template&id=153ac442&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"ab86c8a6-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/paint/paint.vue?vue&type=template&id=153ac442&scoped=true&
 var paintvue_type_template_id_153ac442_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"keyboard-paint",staticStyle:{"margin-top":"5px"}},[_c('div',{staticClass:"canvas-box"},[_c('canvas',{ref:"canvas",attrs:{"width":_vm.p_width,"height":_vm.p_height - 4},on:{"touchstart":_vm.Down,"touchmove":_vm.Move,"touchend":_vm.Mouseup,"mousedown":_vm.Down,"mousemove":_vm.Move,"mouseup":_vm.Mouseup,"mouseleave":_vm.Leave}})]),(_vm.show_result)?_c('table',{staticClass:"result-table",style:(_vm.tStyle)},_vm._l((_vm.write_result),function(item,index){return _c('tr',{key:index},_vm._l((item),function(text,index){return _c('td',{key:index,on:{"click":function($event){return _vm.Select(text)}}},[_vm._v(" "+_vm._s(text)+" ")])}),0)}),0):_vm._e()])}
 var paintvue_type_template_id_153ac442_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/paint/paint.vue?vue&type=template&id=153ac442&scoped=true&
 
-// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
-var runtime = __webpack_require__("96cf");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__("e6cf");
+
+// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
+var runtime = __webpack_require__("96cf");
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 
@@ -9782,6 +9783,7 @@ function _asyncToGenerator(fn) {
   };
 }
 // CONCATENATED MODULE: ./src/components/paint/handWrite/web.ts
+
 
 
 
