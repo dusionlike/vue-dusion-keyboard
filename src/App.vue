@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <button @click="download">获取图像</button> -->
     拼音：
     <input type="text" data-mode="cn" />
     手写：
@@ -24,7 +25,7 @@
       size="mini"
     ></vue-dusion-keyboard> -->
     <vue-dusion-keyboard
-    :blurHide="false"
+      ref="zzz"
       :float="false"
       @keyvalue="kkk"
     ></vue-dusion-keyboard>
@@ -49,22 +50,27 @@
         placeholder="动态生成的input"
       ></el-input>
     </el-dialog>
+    
+    <!-- <img :src="imgSrc" alt=""> -->
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Ref } from "vue-property-decorator";
 import { ElInput } from "element-ui/types/input";
+import VueDusionKeyboard from "./components/VueDusionKeyboard/index.vue";
 
 @Component
 export default class App extends Vue {
   show = false;
   isElectron = Boolean(window.require);
   dialogShow = false;
+  imgSrc = "";
 
   inputVal = "";
 
   @Ref("dialogInput") dialogInput!: ElInput;
+  @Ref("zzz") keyboard!: VueDusionKeyboard;
 
   OpenDialog() {
     this.dialogShow = true;
@@ -74,6 +80,10 @@ export default class App extends Vue {
         this.dialogInput.focus();
       }, 200);
     });
+  }
+
+  download() {
+    this.imgSrc = this.keyboard.paintCom.canvas.toDataURL();
   }
 
   result(res: any) {
