@@ -1,6 +1,6 @@
 {
   "name": "vue-dusion-keyboard",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "private": false,
   "description": "基于vue.js的web键盘，支持离线模式。",
   "license": "MIT",

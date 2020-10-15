@@ -22,8 +22,7 @@
             v-for="(text, index) in cut_cn_list"
             :key="index"
             @click="(e) => clickCN(e, text)"
-            >{{ index + 1 + "." + text }}</span
-          >
+          >{{ index + 1 + "." + text }}</span>
           <div class="page">
             <p class="previous" @click="previous_page">v</p>
             <p class="next" @click="next_page">v</p>
@@ -39,8 +38,7 @@
             :key="index"
             v-for="(key, index) in num_pun_keys"
             @click="(e) => clickNumber(e, key)"
-            >{{ key }}</span
-          >
+          >{{ key }}</span>
         </div>
         <div class="all-pun-box" v-if="mode === 'biaodian'">
           <span
@@ -48,8 +46,7 @@
             :key="index"
             v-for="(key, index) in number_keys2"
             @click="(e) => clickNumber(e, key)"
-            >{{ key }}</span
-          >
+          >{{ key }}</span>
         </div>
         <div class="number-box" v-if="mode === 'num'">
           <span
@@ -57,8 +54,7 @@
             :key="index"
             v-for="(key, index) in number_keys2"
             @click="(e) => clickNumber(e, key)"
-            >{{ key }}</span
-          >
+          >{{ key }}</span>
         </div>
         <div class="del-box">
           <span class="key number num-del" @click="del">
@@ -67,11 +63,7 @@
           <!-- <span v-if="mode==='biaodian'" class="key number blue"></span>
           <span v-else class="key number" @click="mode='biaodian'">标点</span>-->
           <span class="key number blue" @click="mode = 'en_cap'">中/英</span>
-          <span
-            class="key key_hide number"
-            style="margin-left: 0px"
-            @click="HideKey"
-          >
+          <span class="key key_hide number" style="margin-left: 0px" @click="HideKey">
             <svg-keyboard class="jp"></svg-keyboard>
             <span>
               隐藏
@@ -90,19 +82,9 @@
           <span class="key" @click="e=>clickKey(e, '@',true)">@</span>-->
           <span class="key" @click="(e) => clickKey(e, '。', true)">。</span>
           <span class="key" @click="(e) => clickKey(e, '.', true)">.</span>
-          <span
-            v-if="handLib === 'CN'"
-            class="key blue"
-            style="background: #728fa8"
-            >已选择中文</span
-          >
+          <span v-if="handLib === 'CN'" class="key blue" style="background: #728fa8">已选择中文</span>
           <span v-else @click="handLib = 'CN'" class="key blue">中</span>
-          <span
-            v-if="handLib === 'EN'"
-            class="key blue"
-            style="background: #728fa8"
-            >已选择英文</span
-          >
+          <span v-if="handLib === 'EN'" class="key blue" style="background: #728fa8">已选择英文</span>
           <span v-else @click="handLib = 'EN'" class="key blue">英</span>
         </div>
         <paint
@@ -139,40 +121,35 @@
           v-for="(key, index) in number_keys"
           :key="index + 50"
           @click="(e) => clickNumber(e, key)"
-          >{{ key }}</span
-        >
+        >{{ key }}</span>
         <br />
         <span
           class="key letter"
           v-for="(key, index) in letter_keys.slice(0, 10)"
           :key="index + 11"
           @click="(e) => clickKey(e, key)"
-          >{{ key }}</span
-        >
+        >{{ key }}</span>
         <br />
         <span
           class="key letter"
           v-for="(key, index) in letter_keys.slice(10, 19)"
           :key="index + 21"
           @click="(e) => clickKey(e, key)"
-          >{{ key }}</span
-        >
+        >{{ key }}</span>
         <br />
         <span
           v-if="mode === 'cn' || mode === 'en_cap'"
           class="key cap_change"
           style="background: #728fa8"
           @click="cap_change"
-          >{{ mode === "cn" ? "" : "已锁定大写" }}</span
-        >
+        >{{ mode === "cn" ? "" : "已锁定大写" }}</span>
         <span v-else class="key cap_change" @click="cap_change">切换大写</span>
         <span
           class="key letter"
           v-for="(key, index) in letter_keys.slice(19, 26)"
           :key="index + 31"
           @click="(e) => clickKey(e, key)"
-          >{{ key }}</span
-        >
+        >{{ key }}</span>
         <span class="key key_hide" @click="HideKey">
           <svg-keyboard class="jp"></svg-keyboard>
           <span>
@@ -195,9 +172,7 @@
         <span @click="bd_change" class="key blue">标点</span>
         <!-- <span class="key" @click="e=>clickKey(e, '@',true)">@</span> -->
         <span class="key" @click="(e) => clickKey(e, '.', true)">.</span>
-        <span class="key space" @click="(e) => clickKey(e, ' ', true)"
-          >空格</span
-        >
+        <span class="key space" @click="(e) => clickKey(e, ' ', true)">空格</span>
         <span class="key def-del" style="width: 140px" @click="del()">
           <svg-del class="del"></svg-del>
         </span>
@@ -225,14 +200,18 @@ export default class VueDusionKeyboard extends Vue {
         this.initMutationObserver();
       }
       this.sign_up_keyboard();
-      window.addEventListener("animationend", this.SetKeyboardPosition);
-      window.addEventListener("scroll", this.SetKeyboardPosition);
+      if (inputElement && this.float) {
+        window.addEventListener("animationend", this.SetKeyboardPosition);
+        window.addEventListener("scroll", this.SetKeyboardPosition);
+      }
     });
   }
   beforeDestroy() {
     this.clean_sign_up();
-    window.removeEventListener("animationend", this.SetKeyboardPosition);
-    window.removeEventListener("scroll", this.SetKeyboardPosition);
+    if (inputElement && this.float) {
+      window.removeEventListener("animationend", this.SetKeyboardPosition);
+      window.removeEventListener("scroll", this.SetKeyboardPosition);
+    }
   }
 
   @Prop({ default: "primary" }) size!: string;
@@ -282,8 +261,6 @@ export default class VueDusionKeyboard extends Vue {
     this.old_mode = oldVal;
     if (val == "hand") {
       this.$nextTick(() => {
-        console.log(this.myKeyboard);
-        
         this.main_width = this.myKeyboard.offsetWidth;
         this.main_height = this.myKeyboard.offsetHeight;
       });
