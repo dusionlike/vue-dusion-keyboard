@@ -28,6 +28,7 @@
       ref="zzz"
       :float="false"
       @keyvalue="kkk"
+      @del="del"
     ></vue-dusion-keyboard>
     <br />
     <br />
@@ -91,6 +92,10 @@ export default class App extends Vue {
   }
   kkk(kk: string) {
     console.log(kk);
+  }
+  del(text:string,index:number){
+    console.log(text);
+    console.log(index);
   }
 }
 </script>

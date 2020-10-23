@@ -498,6 +498,7 @@ export default class VueDusionKeyboard extends Vue {
   /**删除字符串的某个字符*/
   delStringLast(text: string, index: number) {
     let arrText = text.split("");
+    this.$emit("del", arrText[index], index + 1);
     arrText[index] = "";
     // arrText.pop();
     return arrText.join("");
