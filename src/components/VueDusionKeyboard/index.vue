@@ -217,7 +217,7 @@ export default class VueDusionKeyboard extends Vue {
   @Prop({ default: "primary" }) size!: string;
   @Prop({ type: Boolean, default: true }) float!: boolean;
   @Prop({ type: Boolean, default: false }) all!: boolean;
-  @Prop({ type: Boolean, default: true }) observer!: boolean;
+  @Prop({ type: Boolean, default: false }) observer!: boolean;
   @Prop({ type: Boolean, default: true }) blurHide!: boolean;
   @Prop({ default: "fadeInUp" }) EnterActiveClass!: string;
   @Prop({ default: "fadeOutDown" }) LeaveActiveClass!: string;
@@ -225,6 +225,7 @@ export default class VueDusionKeyboard extends Vue {
   @Prop({ default: () => AllKey.num_pun }) num_pun_keys!: string[];
   @Prop(String) handWriteApi!: string;
   @Prop(String) dllPath!: string;
+  @Prop({ default: "" }) scope!: string;
 
   keyboardStyle: any = {};
   show = false;
@@ -295,19 +296,23 @@ export default class VueDusionKeyboard extends Vue {
 
   /**重新注册所有input标签 */
   sign_up_keyboard() {
+    let element = this.scope ? document.querySelector(this.scope) : null;
+    console.log(element);
+    
     //每个input添加事件
-    let inputAll = document.querySelectorAll("input,textarea") as NodeListOf<
-      HTMLInputElement
-    >;
+    let inputAll = (element || document).querySelectorAll(
+      "input,textarea"
+    ) as NodeListOf<HTMLInputElement>;
     inputAll.forEach((input) => {
       this.addInputEventListener(input);
     });
   }
   /**清理注册事件 */
   clean_sign_up() {
-    let inputAll = document.querySelectorAll("input,textarea") as NodeListOf<
-      HTMLInputElement
-    >;
+    let element = this.scope ? document.querySelector(this.scope) : null;
+    let inputAll = (element || document).querySelectorAll(
+      "input,textarea"
+    ) as NodeListOf<HTMLInputElement>;
     inputAll.forEach((input) => {
       input.removeEventListener("focus", this.show_keyboard);
       input.removeEventListener("blur", this.hide_keyboard);

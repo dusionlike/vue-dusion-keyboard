@@ -28,15 +28,16 @@
       "dom.iterable",
       "scripthost"
     ],
-    "outDir": "tsdict"
+    "outDir": "tsdist"
   },
   "include": [
-    "index.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "src/components",
+    // "index.d.ts",
+    // "src/**/*.ts",
+    // "src/**/*.tsx",
     "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    // "tests/**/*.ts",
+    // "tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

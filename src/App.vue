@@ -1,18 +1,21 @@
 <template>
   <div id="app">
     <!-- <button @click="download">获取图像</button> -->
-    拼音：
-    <input type="text" data-mode="cn" />
-    手写：
-    <input type="text" data-mode="hand" />
-    英文：
-    <input type="text" data-mode="en" />
-    数字：
-    <input type="text" data-mode="num" />
-    标点：
-    <input type="text" data-mode="biaodian" />
-    textarea：
-    <textarea data-mode="en" cols="30" rows="5"></textarea>
+    <div class="scope-test">
+      拼音：
+      <input type="text" data-mode="cn" />
+      手写：
+      <input type="text" data-mode="hand" />
+      英文：
+      <input type="text" data-mode="en" />
+      数字：
+      <input type="text" data-mode="num" />
+      标点：
+      <input type="text" data-mode="biaodian" />
+      textarea：
+      <textarea data-mode="en" cols="30" rows="5"></textarea>
+    </div>
+
     <br />
     <br />zoom：
     <span style="zoom: 1.6">
@@ -23,13 +26,9 @@
       v-if="isElectron"
       :blurHide="false"
       size="mini"
-    ></vue-dusion-keyboard> -->
-    <vue-dusion-keyboard
-      ref="zzz"
-      :float="false"
-      @keyvalue="kkk"
-      @del="del"
-    ></vue-dusion-keyboard>
+    ></vue-dusion-keyboard>-->
+    <VueDusionKeyboard ref="zzz" scope=".scope-test" :float="false" @keyvalue="kkk" @del="del"></VueDusionKeyboard>
+    <VueDusionKeyboard @keyvalue="kkk" @del="del"></VueDusionKeyboard>
     <br />
     <br />
     <el-form inlin>
@@ -39,19 +38,10 @@
     </el-form>
 
     <paint @result="result"></paint>
-    <el-dialog
-      title="测试"
-      :visible.sync="dialogShow"
-      width="30%"
-      @close="dialogShow = false"
-    >
-      <el-input
-        ref="dialogInput"
-        v-model="inputVal"
-        placeholder="动态生成的input"
-      ></el-input>
+    <el-dialog title="测试" :visible.sync="dialogShow" width="30%" @close="dialogShow = false">
+      <el-input ref="dialogInput" v-model="inputVal" placeholder="动态生成的input"></el-input>
     </el-dialog>
-    
+
     <!-- <img :src="imgSrc" alt=""> -->
   </div>
 </template>
@@ -93,7 +83,7 @@ export default class App extends Vue {
   kkk(kk: string) {
     console.log(kk);
   }
-  del(text:string,index:number){
+  del(text: string, index: number) {
     console.log(text);
     console.log(index);
   }

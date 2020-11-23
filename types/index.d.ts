@@ -8,7 +8,7 @@ export interface HWOption {
 declare function install(vue: typeof Vue, option?: HWOption): void;
 declare const _default: {
     install: typeof install;
-    VueDusionKeyboard: import("vue").VueConstructor<Vue>;
-    Paint: import("vue").VueConstructor<Vue>;
+    VueDusionKeyboard: any;
+    Paint: any;
 };
 export default _default;
