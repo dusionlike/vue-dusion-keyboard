@@ -109,6 +109,8 @@ ffi安装失败的小伙伴可以安装：
 |**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
 |**pun_keys**|替换标点符号（16个）|Array|略|无
 |**num_pun_keys**|替换数字键盘左侧标点符号（4个）|Array|略|无
+|**scope**|搜索input的容器|String|略|body
+|**body**|浮动相对的顶级容器|String|略|body
 
 **paint:**
 |属性|说明|类型|可选值|默认值|
@@ -144,3 +146,5 @@ ffi安装失败的小伙伴可以安装：
 - 改为position: fixed;
 - 改回vue.extend模式
 - 手写请求自动取消上次一没返回结果的请求
+- 增加scope
+- 增加body
