@@ -138,8 +138,8 @@ ffi安装失败的小伙伴可以安装：
 |result|手写识别结果|string[]|
 
 ## 更新日志
-#### v2.6.0
-- 改为rollup打包，最终大小62k
+#### v3.0.0
+- 改为rollup打包
 - 手写去除选择字库，默认中文+英文
 - 改为position: fixed;
 - 改回vue.extend模式
