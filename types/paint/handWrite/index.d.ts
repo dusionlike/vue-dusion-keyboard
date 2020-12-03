@@ -1,5 +1,9 @@
-import { HWOption } from '@/components';
-export declare function SET_API_PATH(option: HWOption): void;
+interface HWOption {
+    /**接口地址 */
+    handWriteApi?: string;
+    /**dll目录 */
+    dllPath?: string;
+}
 export declare function getHandWrite(option?: HWOption): HandWrite;
 export interface HandWrite {
     /**装载字体库 */
@@ -11,3 +15,4 @@ export interface HandWrite {
      */
     GetWords: (lpXis: number[], lpYis: number[], lpCis: number[]) => Promise<string[]>;
 }
+export {};

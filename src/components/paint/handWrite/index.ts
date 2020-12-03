@@ -1,15 +1,16 @@
 import WebHandWrite from "./web";
 import LocalHandWrite from "./electron";
-import { HWOption } from '@/components';
+import { globalConfig } from '@/components/globalConfig';
 
-let hwOption: HWOption
-
-export function SET_API_PATH(option: HWOption) {
-    hwOption = option
+interface HWOption {
+    /**接口地址 */
+    handWriteApi?: string
+    /**dll目录 */
+    dllPath?: string
 }
 
-export function getHandWrite(option?: HWOption): HandWrite {
-    option = option || hwOption || {}
+export function getHandWrite(option: HWOption = {}): HandWrite {
+    option = { ...option, ...globalConfig }
     if (option.handWriteApi) {
         return new WebHandWrite(option.handWriteApi)
     } else {

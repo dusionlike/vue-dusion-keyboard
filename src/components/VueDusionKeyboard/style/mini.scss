@@ -1,17 +1,9 @@
 .my-keyboard__mini {
-  $p-min-width:1080px;
   $p-key-width:90px;
   $p-number-width:160px;
   $p-key-left:16px;
   $p-sp-width:338px;
   $p-del-left:16px;
-    min-width: $p-min-width;
-    .pinyin,
-    .select-list {
-      > div {
-        width: $p-min-width;
-      }
-    }
     .main-keyboard {
       .key {
         width: $p-key-width;

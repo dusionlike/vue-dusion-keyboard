@@ -1,14 +1,11 @@
 import Vue from "vue";
-export interface HWOption {
-    /**接口地址 */
-    handWriteApi?: string;
-    /**dll目录 */
-    dllPath?: string;
-}
-declare function install(vue: typeof Vue, option?: HWOption): void;
+export { signUpKeyboard, setKeyboardGlobalConfig } from './globalConfig';
+export declare const VueDusionKeyboard: import("vue").VueConstructor<Vue>;
+export declare const Paint: import("vue").VueConstructor<Vue>;
+declare function install(vue: typeof Vue): void;
 declare const _default: {
     install: typeof install;
-    VueDusionKeyboard: any;
-    Paint: any;
+    VueDusionKeyboard: import("vue").VueConstructor<Vue>;
+    Paint: import("vue").VueConstructor<Vue>;
 };
 export default _default;

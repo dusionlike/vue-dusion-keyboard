@@ -59,15 +59,14 @@ window.sign_up_keyboard();
 **Paint组件**
 - paint组件为vue-dusion-keyboard内置写字板组件
 ```
-<paint hand-write-api="http://jsrtj.fotoit.cn/iis/HandWriteApi/words" @result="result"></paint>
+<paint hand-write-api="xxx" @result="result"></paint>
 ```
 ---
 
 ## 模式
 
-### 离线模式
-#### 版权问题暂不提供
-<!-- 组件默认为离线模式，离线模式需要运行在[electron](https://electronjs.org)环境下，所需的控件有：
+<!-- ### 离线模式
+ 组件默认为离线模式，离线模式需要运行在[electron](https://electronjs.org)环境下，所需的控件有：
 ##### nodejs模块:
 - `ffi`
 - `ref`
@@ -80,9 +79,7 @@ ffi安装失败的小伙伴可以安装：
 - `XDLL.dll` : 放置在electron根目录的`plug\\handWrite\\XDLL.dll`下。
 ##### 手写字库:
 - `hz.mrd` : 中文字库，放置在`XDLL.dll`同目录下。
-- `English.mrd` : 英文字库，放置在`XDLL.dll`同目录下。
-
-```以上文件可加qq751069244索取``` -->
+- `English.mrd` : 英文字库，放置在`XDLL.dll`同目录下。 -->
 
 ### 互联网模式
 组件上添加`hand-write-api`属性即可切换互联网模式，可以直接运行在浏览器中
@@ -106,7 +103,6 @@ ffi安装失败的小伙伴可以安装：
 |**observer**|开启后会使用`MutationObserver`对dom更改进行监听，如果有新的input标签生成即为其注册键盘弹起事件|Boolean|true/false|true|
 |**float**|是否使输入法组件浮动在当前`input`标签下方|Boolean|true/false|true|
 |**blurHide**|当`input`标签失去焦点时是否隐藏输入组件|Boolean|true/false|true|
-|**size**|组件大小，mini最小支持宽度1080px，默认最小宽度则是1330px|String|primary/mini|primary|
 |**enter-active-class**|输入组件弹出来的动画效果，基于[Animate.css](https://daneden.github.io/animate.css/)|String|见 [Animate.css](https://daneden.github.io/animate.css/) 官网|fadeInUp|
 |**leave-active-class**|输入组件隐藏时的动画效果|String|同上|fadeOutDown|
 |**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
@@ -118,8 +114,6 @@ ffi安装失败的小伙伴可以安装：
 |属性|说明|类型|可选值|默认值|
 |:-:|:-|:-|:-|:-|
 |**show_result**|是否在右侧显示结果|Boolean|true/false|true|
-|**p_width**|画板宽度|number|-|600|
-|**p_height**|画板高度|number|-|400|
 |**lib**|手写识别库|string|CN/EN|CN|
 |**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
 |**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
@@ -144,10 +138,9 @@ ffi安装失败的小伙伴可以安装：
 |result|手写识别结果|string[]|
 
 ## 更新日志
-#### v2.4.0
-- 改为calss components写法
-- 增加全局注册请求地址的方法
-- 增加keyvalue事件
-
-#### v2.4.3
-- 增加del事件
+#### v2.6.0
+- 改为rollup打包，最终大小62k
+- 手写去除选择字库，默认中文+英文
+- 改为position: fixed;
+- 改回vue.extend模式
+- 手写请求自动取消上次一没返回结果的请求

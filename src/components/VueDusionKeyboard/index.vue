@@ -6,29 +6,10 @@
     <div
       v-show="show"
       :style="keyboardStyle"
-      :class="'my-keyboard my-keyboard__' + size"
+      class="my-keyboard my-keyboard__mini"
       @mousedown.prevent
       ref="my_keyboard"
     >
-      <div v-if="mode === 'cn'" class="pinyin">
-        <div>
-          <span>{{ cn_input }}</span>
-        </div>
-      </div>
-      <div v-if="mode === 'cn'" class="select-list">
-        <div>
-          <span
-            class="select-text"
-            v-for="(text, index) in cut_cn_list"
-            :key="index"
-            @click="(e) => clickCN(e, text)"
-          >{{ index + 1 + "." + text }}</span>
-          <div class="page">
-            <p class="previous" @click="previous_page">v</p>
-            <p class="next" @click="next_page">v</p>
-          </div>
-        </div>
-      </div>
       <!-- 数字键盘 -->
       <div v-if="mode === 'num' || mode === 'biaodian'" class="main-keyboard">
         <div class="pun-box" v-if="mode === 'num'">
@@ -75,23 +56,19 @@
         </div>
       </div>
       <!-- 手写键盘 -->
-      <div v-else-if="mode === 'hand' && main_width" class="main-keyboard">
-        <div class="hand-left-box">
-          <span class="key" @click="(e) => clickKey(e, '，', true)">，</span>
-          <!-- <span class="key" @click="e=>clickKey(e, ';',true)">;</span>
-          <span class="key" @click="e=>clickKey(e, '@',true)">@</span>-->
-          <span class="key" @click="(e) => clickKey(e, '。', true)">。</span>
+      <div
+        v-else-if="mode === 'hand' && main_width"
+        class="main-keyboard"
+        style="min-width:1080px;padding-top:8px;"
+      >
+        <div class="hand-left-box" style="margin-right:6px;">
+          <span class="key" @click="(e) => clickKey(e, '!', true)">:</span>
+          <span class="key" @click="(e) => clickKey(e, ',', true)">,</span>
           <span class="key" @click="(e) => clickKey(e, '.', true)">.</span>
-          <span v-if="handLib === 'CN'" class="key blue" style="background: #728fa8">已选择中文</span>
-          <span v-else @click="handLib = 'CN'" class="key blue">中</span>
-          <span v-if="handLib === 'EN'" class="key blue" style="background: #728fa8">已选择英文</span>
-          <span v-else @click="handLib = 'EN'" class="key blue">英</span>
+          <span class="key" @click="(e) => clickKey(e, '?', true)">;</span>
+          <span class="key" @click="(e) => clickKey(e, '@', true)">@</span>
         </div>
         <paint
-          ref="paintCom"
-          :size="size"
-          :p_width="main_width * 0.4"
-          :p_height="main_height - 10"
           @SelectText="HandText"
           :lib="handLib"
           :handWriteApi="handWriteApi"
@@ -116,6 +93,25 @@
       </div>
       <!-- 普通键盘 -->
       <div v-else class="main-keyboard">
+        <div v-if="mode === 'cn'" class="pinyin">
+          <div>
+            <span>{{ cn_input }}</span>
+          </div>
+        </div>
+        <div v-if="mode === 'cn'" class="select-list">
+          <div>
+            <span
+              class="select-text"
+              v-for="(text, index) in cut_cn_list"
+              :key="index"
+              @click="(e) => clickCN(e, text)"
+            >{{ index + 1 + "." + text }}</span>
+            <div class="page">
+              <p class="previous" @click="previous_page">v</p>
+              <p class="next" @click="next_page">v</p>
+            </div>
+          </div>
+        </div>
         <span
           class="key"
           v-for="(key, index) in number_keys"
@@ -182,375 +178,428 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref } from "vue-property-decorator";
 import AllKey from "./key";
-import dict from "./dist/pinyin_dict_notone";
+import * as dict from "./dict/pinyin_dict_notone.json";
 import SvgDel from "./svg/svg-del.vue";
 import SvgKeyboard from "./svg/svg-keybord.vue";
 import Paint from "../paint/paint.vue";
+import Vue from "vue";
+import { setGlobalCb } from "../globalConfig";
 
-let inputElement: HTMLInputElement;
+interface VueDusionKeyboardData {
+  inputElement: HTMLInputElement | null;
+  keyboardStyle: any;
+  show: boolean;
+  input_top: number;
+  mode: string;
+  old_mode: string;
+  main_width: number;
+  main_height: number;
+  number_keys: string[];
+  cn_input: string;
+  cn_list_str: string;
+  l_min: number;
+  l_max: number;
+  handLib: string;
+}
 
-@Component({ components: { Paint, SvgDel, SvgKeyboard } })
-export default class VueDusionKeyboard extends Vue {
+export default Vue.extend({
+  name: "VueDusionKeyboard",
+  components: { Paint, SvgDel, SvgKeyboard },
   mounted() {
-    // window.sign_up_keyboard = this.sign_up_keyboard.bind(this);
     this.$nextTick(() => {
       if (this.observer) {
         this.initMutationObserver();
       }
-      this.sign_up_keyboard();
-      if (inputElement && this.float) {
-        window.addEventListener("animationend", this.SetKeyboardPosition);
-        window.addEventListener("scroll", this.SetKeyboardPosition);
+      setGlobalCb(this.sign_up_keyboard());
+      if (this.float) {
+        // document.addEventListener("animationend", this.SetKeyboardPosition);
+        document.addEventListener("scroll", this.SetKeyboardPosition);
       }
     });
-  }
+  },
   beforeDestroy() {
     this.clean_sign_up();
-    if (inputElement && this.float) {
-      window.removeEventListener("animationend", this.SetKeyboardPosition);
-      window.removeEventListener("scroll", this.SetKeyboardPosition);
+    if (this.float) {
+      // document.removeEventListener("animationend", this.SetKeyboardPosition);
+      document.removeEventListener("scroll", this.SetKeyboardPosition);
     }
-  }
-
-  @Prop({ default: "primary" }) size!: string;
-  @Prop({ type: Boolean, default: true }) float!: boolean;
-  @Prop({ type: Boolean, default: false }) all!: boolean;
-  @Prop({ type: Boolean, default: false }) observer!: boolean;
-  @Prop({ type: Boolean, default: true }) blurHide!: boolean;
-  @Prop({ default: "fadeInUp" }) EnterActiveClass!: string;
-  @Prop({ default: "fadeOutDown" }) LeaveActiveClass!: string;
-  @Prop({ default: () => AllKey.punctuation }) pun_keys!: string[];
-  @Prop({ default: () => AllKey.num_pun }) num_pun_keys!: string[];
-  @Prop(String) handWriteApi!: string;
-  @Prop(String) dllPath!: string;
-  @Prop({ default: "" }) scope!: string;
-
-  keyboardStyle: any = {};
-  show = false;
-  input_top = 0;
-  mode = "cn";
-  old_mode = "en_cap";
-  main_width = 0;
-  main_height = 0;
-  number_keys = AllKey.number;
-  cn_input = "";
-  cn_list_str = "";
-  l_min = 0;
-  l_max = 10;
-  handLib = "CN";
-
-  get number_keys2(): string[] {
-    return this.mode === "num" ? AllKey.number2 : this.pun_keys;
-  }
-  get letter_keys(): string[] {
-    return this.mode === "en_cap" ? AllKey.cap_letter : AllKey.letter;
-  }
-  get cn_list(): string[] {
-    return this.cn_list_str ? this.cn_list_str.split("") : [];
-  }
-  get cut_cn_list(): string[] {
-    return this.cn_list.slice(this.l_min, this.l_max);
-  }
-
-  @Ref("my_keyboard") myKeyboard!: HTMLLIElement;
-  @Ref("paintCom") paintCom!: Paint;
-
-  @Watch("mode")
-  watchMode(val: string, oldVal: string) {
-    this.old_mode = oldVal;
-    if (val == "hand") {
-      this.$nextTick(() => {
-        this.main_width = this.myKeyboard.offsetWidth;
-        this.main_height = this.myKeyboard.offsetHeight;
-      });
-    }
-  }
-
-  /**监控dom变化，注册键盘弹出事件 */
-  initMutationObserver() {
-    let mutationObserver = new MutationObserver((mutations, observer) => {
-      mutations.forEach((mutation) => {
-        this.cbAddedNode(mutation.addedNodes);
-      });
-    });
-    mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: false,
-      characterData: false,
-      attributeOldValue: false,
-      characterDataOldValue: false,
-    });
-  }
-
-  cbAddedNode(addedNodes: NodeList) {
-    for (const addedNode of addedNodes) {
-      // console.log(addedNode.nodeName);
-      if (addedNode.nodeName == "INPUT")
-        this.addInputEventListener(addedNode as HTMLInputElement);
-      if (addedNode.childNodes.length) this.cbAddedNode(addedNode.childNodes);
-    }
-  }
-
-  /**重新注册所有input标签 */
-  sign_up_keyboard() {
-    let element = this.scope ? document.querySelector(this.scope) : null;
-    console.log(element);
-    
-    //每个input添加事件
-    let inputAll = (element || document).querySelectorAll(
-      "input,textarea"
-    ) as NodeListOf<HTMLInputElement>;
-    inputAll.forEach((input) => {
-      this.addInputEventListener(input);
-    });
-  }
-  /**清理注册事件 */
-  clean_sign_up() {
-    let element = this.scope ? document.querySelector(this.scope) : null;
-    let inputAll = (element || document).querySelectorAll(
-      "input,textarea"
-    ) as NodeListOf<HTMLInputElement>;
-    inputAll.forEach((input) => {
-      input.removeEventListener("focus", this.show_keyboard);
-      input.removeEventListener("blur", this.hide_keyboard);
-    });
-  }
-  addInputEventListener(input: HTMLInputElement) {
-    if (this.all || input.dataset.mode) {
-      input.addEventListener("focus", this.show_keyboard);
-      if (this.blurHide) {
-        input.addEventListener("blur", this.hide_keyboard);
-      }
-    }
-  }
-  /**
-   * 往上查找计算父元素的zoom
-   * dom：父级document
-   * zoom：计算的放大倍数
-   * isThisParent：是否已经到达本控件所在的层级的父级
-   */
-  getZoom(dom: HTMLElement, zoom: number = 1): number {
-    //当前dom的zoom
-    let m_zoom =
-      dom.style.zoom || window.getComputedStyle(dom, null).zoom || "1";
-    zoom = zoom * parseFloat(m_zoom);
-
-    let isThisParent = false;
-    let children = dom.children;
-    for (let i = 0; i < children.length; i++) {
-      if (this.$el == children[i]) {
-        isThisParent = true;
-        continue;
-      }
-    }
-    //到达最上级
-    if (dom.parentNode == document) {
-      return zoom;
-    }
-    //到达插件的父级，并且position=relative，停止往上计算
-    if (isThisParent) {
-      let position =
-        dom.style.position || window.getComputedStyle(dom, null).position;
-      if (position == "relative") return zoom;
-    }
-
-    return this.getZoom(dom.parentNode as HTMLElement, zoom);
-  }
-
-  /**设置键盘位置 */
-  SetKeyboardPosition() {
-    if (!inputElement) return;
-    let bound = inputElement.getBoundingClientRect();
-    let toptop = document.documentElement.scrollTop;
-    //当css设置了zoom时
-    let zoom = this.getZoom(inputElement);
-    // console.log(zoom);
-
-    let st_top = (bound.y + bound.height + 10 + toptop) * zoom;
-    // console.log(bound);
-    this.keyboardStyle = {
-      position: "absolute",
-      left: "0",
-      "z-index": "99999",
-      top: st_top + "px",
+  },
+  props: {
+    float: { type: Boolean, default: true },
+    all: { type: Boolean, default: false },
+    observer: { type: Boolean, default: false },
+    blurHide: { type: Boolean, default: true },
+    LeaveActiveClass: { default: "fadeOutDown" },
+    EnterActiveClass: { default: "fadeInUp" },
+    pun_keys: { default: () => AllKey.punctuation },
+    num_pun_keys: { default: () => AllKey.num_pun },
+    handWriteApi: String,
+    dllPath: String,
+    scope: String,
+    /**顶级容器，默认'body' */
+    body: String,
+  },
+  data(): VueDusionKeyboardData {
+    return {
+      inputElement: null,
+      keyboardStyle: {},
+      show: false,
+      input_top: 0,
+      mode: "cn",
+      old_mode: "en_cap",
+      main_width: 0,
+      main_height: 0,
+      number_keys: AllKey.number,
+      cn_input: "",
+      cn_list_str: "",
+      l_min: 0,
+      l_max: 10,
+      handLib: "CN",
     };
-  }
-  /**显示键盘 */
-  show_keyboard(event: FocusEvent) {
-    // console.log("show");
-    if (!event.target) return;
-    inputElement = event.target as HTMLInputElement;
-    this.show = true;
-    if (inputElement.dataset.mode) {
-      this.mode = inputElement.dataset.mode;
-    }
-    if (inputElement && this.float) {
-      this.SetKeyboardPosition();
-    }
-  }
-  /**隐藏键盘 */
-  hide_keyboard(event: FocusEvent) {
-    // console.log("hide");
-    let element = event.relatedTarget as HTMLElement;
-    if (
-      !element ||
-      element.tagName != "INPUT" ||
-      (!this.all && !element.dataset.mode)
-    ) {
+  },
+  watch: {
+    mode(val: string, oldVal: string) {
+      const myKeyboard = this.$refs.my_keyboard as HTMLDivElement;
+      this.old_mode = oldVal;
+      if (val == "hand") {
+        this.$nextTick(() => {
+          this.main_width = myKeyboard.offsetWidth;
+          this.main_height = myKeyboard.offsetHeight;
+        });
+      }
+    },
+  },
+  computed: {
+    number_keys2(): string[] {
+      return this.mode === "num" ? AllKey.number2 : this.pun_keys;
+    },
+    letter_keys(): string[] {
+      return this.mode === "en_cap" ? AllKey.cap_letter : AllKey.letter;
+    },
+    cn_list(): string[] {
+      return this.cn_list_str ? this.cn_list_str.split("") : [];
+    },
+    cut_cn_list(): string[] {
+      return this.cn_list.slice(this.l_min, this.l_max);
+    },
+  },
+  methods: {
+    /**监控dom变化，注册键盘弹出事件 */
+    initMutationObserver() {
+      let mutationObserver = new MutationObserver((mutations, observer) => {
+        mutations.forEach((mutation) => {
+          this.cbAddedNode(mutation.addedNodes);
+        });
+      });
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: false,
+        characterData: false,
+        attributeOldValue: false,
+        characterDataOldValue: false,
+      });
+    },
+
+    cbAddedNode(addedNodes: NodeList) {
+      for (const addedNode of addedNodes) {
+        // console.log(addedNode.nodeName);
+        if (addedNode.nodeName == "INPUT")
+          this.addInputEventListener(addedNode as HTMLInputElement);
+        if (addedNode.childNodes.length) this.cbAddedNode(addedNode.childNodes);
+      }
+    },
+
+    /**重新注册所有input标签 */
+    sign_up_keyboard() {
+      let element = this.scope ? document.querySelector(this.scope) : null;
+      // console.log(element);
+
+      //每个input添加事件
+      let inputAll = (element || document).querySelectorAll(
+        "input,textarea"
+      ) as NodeListOf<HTMLInputElement>;
+      inputAll.forEach((input) => {
+        this.addInputEventListener(input);
+      });
+    },
+    /**清理注册事件 */
+    clean_sign_up() {
+      let element = this.scope ? document.querySelector(this.scope) : null;
+      let inputAll = (element || document).querySelectorAll(
+        "input,textarea"
+      ) as NodeListOf<HTMLInputElement>;
+      inputAll.forEach((input) => {
+        input.removeEventListener("focus", this.show_keyboard);
+        input.removeEventListener("blur", this.hide_keyboard);
+      });
+    },
+    addInputEventListener(input: HTMLInputElement) {
+      if (this.all || input.dataset.mode) {
+        input.addEventListener("focus", this.show_keyboard);
+        if (this.blurHide) {
+          input.addEventListener("blur", this.hide_keyboard);
+        }
+      }
+    },
+    /**
+     * 往上查找计算父元素的zoom
+     * dom：父级document
+     * zoom：计算的放大倍数
+     * isThisParent：是否已经到达本控件所在的层级的父级
+     */
+    getZoom(dom: HTMLElement, zoom: number = 1): number {
+      //当前dom的zoom
+      let m_zoom =
+        dom.style.zoom || window.getComputedStyle(dom, null).zoom || "1";
+      zoom = zoom * parseFloat(m_zoom);
+
+      let isThisParent = false;
+      let children = dom.children;
+      for (let i = 0; i < children.length; i++) {
+        if (this.$el == children[i]) {
+          isThisParent = true;
+          continue;
+        }
+      }
+      //到达最上级
+      if (dom.parentNode == document) {
+        return zoom;
+      }
+      //到达插件的父级，并且position=relative，停止往上计算
+      if (isThisParent) {
+        let position =
+          dom.style.position || window.getComputedStyle(dom, null).position;
+        if (position == "relative") return zoom;
+      }
+
+      return this.getZoom(dom.parentNode as HTMLElement, zoom);
+    },
+
+    /**设置键盘位置 */
+    SetKeyboardPosition() {
+      if (!this.inputElement) return;
+      let bound = this.inputElement.getBoundingClientRect();
+      let toptop = 0; //document.documentElement.scrollTop;
+      //当css设置了zoom时
+      let zoom = this.getZoom(this.inputElement);
+      // console.log(zoom);
+      let $el = this.$el.children[0];
+      let bodyEl =
+        (this.body && document.querySelector(this.body)) || document.body;
+      let bodyBound = bodyEl.getBoundingClientRect();
+
+      let st_top = (bound.y + bound.height + 10 + toptop) * zoom;
+      // console.log(bound);
+      this.keyboardStyle = {
+        position: "fixed",
+        left: bodyBound.left + bodyBound.width / 2 - $el.clientWidth / 2 + "px",
+        "z-index": "99999",
+        top: st_top + "px",
+      };
+    },
+    /**显示键盘 */
+    show_keyboard(event: FocusEvent) {
+      // console.log("show");
+      if (!event.target) return;
+      this.inputElement = event.target as HTMLInputElement;
+      this.show = true;
+      if (this.inputElement.dataset.mode) {
+        this.mode = this.inputElement.dataset.mode;
+      }
+      if (this.inputElement && this.float) {
+        this.$nextTick(() => {
+          this.SetKeyboardPosition();
+        });
+      }
+    },
+    /**隐藏键盘 */
+    hide_keyboard(event: FocusEvent) {
+      // console.log("hide");
+      let element = event.relatedTarget as HTMLElement;
+      if (
+        !element ||
+        element.tagName != "INPUT" ||
+        (!this.all && !element.dataset.mode)
+      ) {
+        this.show = false;
+      }
+    },
+
+    HideKey() {
       this.show = false;
-    }
-  }
-
-  HideKey() {
-    this.show = false;
-    inputElement.blur();
-  }
-  // mousedown(event: MouseEvent) {
-  //   // console.log(inputElement);
-  //   event.preventDefault();
-  // }
-  /**手写选择文字*/
-  HandText(text: string) {
-    if (inputElement !== document.activeElement) return;
-    let index = inputElement.selectionStart || 0;
-    inputElement.value = this.insertString(inputElement.value, text, index);
-    this.TheEnd(index + 1);
-    //触发input事件
-    inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  //点击按钮
-  clickKey(event: Event, key: string, pass?: boolean) {
-    if (inputElement !== document.activeElement) return;
-    let index = inputElement.selectionStart || 0;
-    event.preventDefault();
-    this.$emit("keyvalue", key);
-    if (this.mode === "cn" && !pass) {
-      this.cn_input += key;
-      this.l_min = 0;
-      this.l_max = 10;
-
-      let re = new RegExp(`^${this.cn_input}\\w*`);
-      let keys = Object.keys(dict)
-        .filter((key) => re.test(key))
-        .sort();
-      // console.log(keys);
-      this.cn_list_str =
-        keys.length > 1
-          ? keys.reduce((a, b) => a + dict[b], "")
-          : dict[keys[0]]; //dict[this.cn_input];
-    } else {
-      // inputElement.value += key;
-      inputElement.value = this.insertString(inputElement.value, key, index);
+      this.inputElement && this.inputElement.blur();
+    },
+    // mousedown(event: MouseEvent) {
+    //   // console.log(this.inputElement);
+    //   event.preventDefault();
+    // }
+    /**手写选择文字*/
+    HandText(text: string) {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      let index = this.inputElement.selectionStart || 0;
+      this.inputElement.value = this.insertString(
+        this.inputElement.value,
+        text,
+        index
+      );
       this.TheEnd(index + 1);
-    }
-    //触发input事件
-    inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  clickNumber(event: Event, key: string) {
-    if (inputElement !== document.activeElement) return;
-    let index = inputElement.selectionStart || 0;
-    event.preventDefault();
-    if (this.mode === "cn" && this.cn_input !== "") {
-      inputElement.value += this.cut_cn_list[parseInt(key) - 1];
+      //触发input事件
+      this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    //点击按钮
+    clickKey(event: Event, key: string, pass?: boolean) {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      let index = this.inputElement.selectionStart || 0;
+      event.preventDefault();
+      this.$emit("keyvalue", key);
+      if (this.mode === "cn" && !pass) {
+        this.cn_input += key;
+        this.l_min = 0;
+        this.l_max = 10;
+
+        let re = new RegExp(`^${this.cn_input}\\w*`);
+        let keys = Object.keys(dict)
+          .filter((key) => re.test(key))
+          .sort();
+        // console.log(keys);
+        this.cn_list_str =
+          keys.length > 1
+            ? keys.reduce((a, b) => a + dict[b], "")
+            : dict[keys[0]]; //dict[this.cn_input];
+      } else {
+        // this.inputElement.value += key;
+        this.inputElement.value = this.insertString(
+          this.inputElement.value,
+          key,
+          index
+        );
+        this.TheEnd(index + 1);
+      }
+      //触发input事件
+      this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    clickNumber(event: Event, key: string) {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      let index = this.inputElement.selectionStart || 0;
+      event.preventDefault();
+      if (this.mode === "cn" && this.cn_input !== "") {
+        this.inputElement.value += this.cut_cn_list[parseInt(key) - 1];
+        this.cn_input = "";
+        this.cn_list_str = "";
+      } else {
+        // this.inputElement.value += key;
+        this.inputElement.value = this.insertString(
+          this.inputElement.value,
+          key,
+          index
+        );
+        this.TheEnd(index + 1);
+      }
+      //触发input事件
+      this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    clickCN(event: Event, text: string) {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      let index = this.inputElement.selectionStart || 0;
+      event.preventDefault();
+      // this.inputElement.value += text;
+      this.inputElement.value = this.insertString(
+        this.inputElement.value,
+        text,
+        index
+      );
       this.cn_input = "";
       this.cn_list_str = "";
-    } else {
-      // inputElement.value += key;
-      inputElement.value = this.insertString(inputElement.value, key, index);
+      //触发input事件
+      this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
       this.TheEnd(index + 1);
-    }
-    //触发input事件
-    inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  clickCN(event: Event, text: string) {
-    let index = inputElement.selectionStart || 0;
-    event.preventDefault();
-    // inputElement.value += text;
-    inputElement.value = this.insertString(inputElement.value, text, index);
-    this.cn_input = "";
-    this.cn_list_str = "";
-    //触发input事件
-    inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-    this.TheEnd(index + 1);
-  }
-  del() {
-    if (inputElement !== document.activeElement) return;
-    let index = inputElement.selectionStart || 0;
-    if (this.mode === "cn" && this.cn_input !== "") {
-      this.cn_input = this.delStringLast(
-        this.cn_input,
-        this.cn_input.length - 1
-      );
-      this.l_min = 0;
-      this.l_max = 10;
-      this.cn_list_str = dict[this.cn_input];
-    } else {
-      inputElement.value = this.delStringLast(inputElement.value, index - 1);
-      this.TheEnd(index - 1);
-    }
-    //触发input事件
-    inputElement.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  /**字符串插入文字 */
-  insertString(text: string, input: string, index: number) {
-    let arrText = text.split("");
-    arrText.splice(index, 0, input);
-    return arrText.join("");
-  }
-  /**删除字符串的某个字符*/
-  delStringLast(text: string, index: number) {
-    let arrText = text.split("");
-    this.$emit("del", arrText[index], index + 1);
-    arrText[index] = "";
-    // arrText.pop();
-    return arrText.join("");
-  }
-  /**光标归位*/
-  TheEnd(index: number) {
-    inputElement.selectionStart = index;
-    inputElement.selectionEnd = index;
-  }
-  cap_change() {
-    if (this.mode !== "cn") {
-      this.mode = this.mode === "en_cap" ? "en_let" : "en_cap";
-    }
-  }
-  cn_change() {
-    this.mode = this.mode === "cn" ? "en_cap" : "cn";
-    this.cn_input = "";
-    this.cn_list_str = "";
-  }
-  num_change() {
-    this.mode = "num";
-  }
-  bd_change() {
-    this.mode = "biaodian";
-  }
-  Fanhui() {
-    this.mode = this.old_mode;
-  }
-  previous_page() {
-    if (this.l_min > 0) {
-      this.l_min = this.l_min - 10;
-      this.l_max = this.l_max - 10;
-    }
-  }
-  next_page() {
-    if (this.cn_list.length > this.l_max) {
-      this.l_min += 10;
-      this.l_max += 10;
-    }
-  }
-}
+    },
+    del() {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      let index = this.inputElement.selectionStart || 0;
+      if (this.mode === "cn" && this.cn_input !== "") {
+        this.cn_input = this.delStringLast(
+          this.cn_input,
+          this.cn_input.length - 1
+        );
+        this.l_min = 0;
+        this.l_max = 10;
+        this.cn_list_str = dict[this.cn_input];
+      } else {
+        this.inputElement.value = this.delStringLast(
+          this.inputElement.value,
+          index - 1
+        );
+        this.TheEnd(index - 1);
+      }
+      //触发input事件
+      this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    /**字符串插入文字 */
+    insertString(text: string, input: string, index: number) {
+      let arrText = text.split("");
+      arrText.splice(index, 0, input);
+      return arrText.join("");
+    },
+    /**删除字符串的某个字符*/
+    delStringLast(text: string, index: number) {
+      let arrText = text.split("");
+      this.$emit("del", arrText[index], index + 1);
+      arrText[index] = "";
+      // arrText.pop();
+      return arrText.join("");
+    },
+    /**光标归位*/
+    TheEnd(index: number) {
+      if (!this.inputElement || this.inputElement !== document.activeElement)
+        return;
+      this.inputElement.selectionStart = index;
+      this.inputElement.selectionEnd = index;
+    },
+    cap_change() {
+      if (this.mode !== "cn") {
+        this.mode = this.mode === "en_cap" ? "en_let" : "en_cap";
+      }
+    },
+    cn_change() {
+      this.mode = this.mode === "cn" ? "en_cap" : "cn";
+      this.cn_input = "";
+      this.cn_list_str = "";
+    },
+    num_change() {
+      this.mode = "num";
+    },
+    bd_change() {
+      this.mode = "biaodian";
+    },
+    Fanhui() {
+      this.mode = this.old_mode;
+    },
+    previous_page() {
+      if (this.l_min > 0) {
+        this.l_min = this.l_min - 10;
+        this.l_max = this.l_max - 10;
+      }
+    },
+    next_page() {
+      if (this.cn_list.length > this.l_max) {
+        this.l_min += 10;
+        this.l_max += 10;
+      }
+    },
+  },
+});
 </script>
 
 
 <style lang="scss" scoped>
-@import "./style/animate.part.css";
-@import "./style/primary.scss";
 @import "./style/mini.scss";
 i {
   font-style: normal;
@@ -565,9 +614,12 @@ i {
   margin-top: 0px;
 }
 .my-keyboard {
-  width: 100%;
+  // margin: 0 auto;
+  // left: 0;
+  // right: 0;
+  // width: 0px;
   // min-width: $min-width;
-  height: 400px;
+  // height: 300px;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -581,9 +633,13 @@ i {
     }
   }
   .pinyin {
+    margin-top: 14px;
+    box-sizing: border-box;
     height: 30px;
     background: #fff;
     border: 1px solid rgba(209, 209, 209, 1);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     padding: 0 20px;
     text-align: left;
     > div span {
@@ -597,6 +653,8 @@ i {
     background: #fff;
     border: 1px solid rgba(209, 209, 209, 1);
     border-top: none;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     padding: 0;
     text-align: left;
     > div {
@@ -608,13 +666,16 @@ i {
       font-size: 24px;
       font-weight: bold;
       & + .select-text {
-        margin-left: 48px;
+        margin-left: 42px;
+      }
+      &:nth-of-type(1) {
+        margin-left: 20px;
       }
     }
     .page {
       position: absolute;
       top: 0;
-      right: 30px;
+      right: 7px;
       width: 120px;
       height: 50px;
       .previous {
@@ -645,9 +706,12 @@ i {
     }
   }
   .main-keyboard {
-    padding: 0 14px;
+    // width: 1080px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 0 14px 14px 14px;
     background: #e6e6e6;
-    height: 400px;
+    // height: 400px;
     .key {
       height: 60px;
       line-height: 60px;
@@ -743,5 +807,68 @@ i {
     //   width: 338px;
     // }
   }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+
+@-webkit-keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+.fadeOutDown {
+  -webkit-animation-name: fadeOutDown;
+  animation-name: fadeOutDown;
+}
+
+.animated.faster {
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
 }
 </style>

@@ -1,7 +1,5 @@
 import { HandWrite } from "./index";
 export default class LocalHandWrite implements HandWrite {
-    private static ffi;
-    private static ref;
     private static path;
     private zcsids;
     private subRectCbn;

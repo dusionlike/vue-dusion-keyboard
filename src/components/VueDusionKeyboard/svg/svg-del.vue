@@ -8,7 +8,5 @@
 
 <script lang="ts">
 import Vue from 'vue'
-export default Vue.extend({
-  name:'svg-del'
-})
+export default Vue.extend({name:'svg-del'})
 </script>

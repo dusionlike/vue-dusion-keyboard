@@ -4,5 +4,6 @@ export default class WebHandWrite implements HandWrite {
     private lib;
     constructor(api: string);
     createLib(lib: string): Promise<boolean>;
+    private nowRequest;
     GetWords(lpXis: number[], lpYis: number[], lpCis: number[]): Promise<string[]>;
 }

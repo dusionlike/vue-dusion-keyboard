@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2016",
+    "module": "ESNext",
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -10,6 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "sourceMap": false,
     "baseUrl": ".",
     "declaration": true,
@@ -31,13 +32,11 @@
     "outDir": "tsdist"
   },
   "include": [
-    "src/components",
-    // "index.d.ts",
-    // "src/**/*.ts",
-    // "src/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "src/**/*.vue",
-    // "tests/**/*.ts",
-    // "tests/**/*.tsx"
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

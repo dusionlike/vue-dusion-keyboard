@@ -8,7 +8,5 @@
 
 <script lang="ts">
 import Vue from 'vue'
-export default Vue.extend({
-  name:'svg-keybord'
-})
+export default Vue.extend({name:'svg-keybord'})
 </script>

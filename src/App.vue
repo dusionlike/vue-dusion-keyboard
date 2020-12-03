@@ -27,8 +27,8 @@
       :blurHide="false"
       size="mini"
     ></vue-dusion-keyboard>-->
-    <VueDusionKeyboard ref="zzz" scope=".scope-test" :float="false" @keyvalue="kkk" @del="del"></VueDusionKeyboard>
-    <VueDusionKeyboard @keyvalue="kkk" @del="del"></VueDusionKeyboard>
+    <VueDusionKeyboard ref="zzz" scope=".scope-test" @keyvalue="kkk" @del="del"></VueDusionKeyboard>
+    <!-- <VueDusionKeyboard @keyvalue="kkk" @del="del"></VueDusionKeyboard> -->
     <br />
     <br />
     <el-form inlin>
@@ -61,7 +61,7 @@ export default class App extends Vue {
   inputVal = "";
 
   @Ref("dialogInput") dialogInput!: ElInput;
-  @Ref("zzz") keyboard!: VueDusionKeyboard;
+  @Ref("zzz") keyboard!: typeof VueDusionKeyboard;
 
   OpenDialog() {
     this.dialogShow = true;
@@ -73,9 +73,9 @@ export default class App extends Vue {
     });
   }
 
-  download() {
-    this.imgSrc = this.keyboard.paintCom.canvas.toDataURL();
-  }
+  // download() {
+  //   this.imgSrc = this.keyboard.paintCom.canvas.toDataURL();
+  // }
 
   result(res: any) {
     console.log(res);

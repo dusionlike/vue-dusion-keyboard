@@ -1,15 +1,36 @@
-import _ffi from 'ffi'
-import _ref from "ref";
 import { HandWrite } from "./index";
+import fsType from "fs";
+import ffiType from 'ffi'
+import refType from "ref";
 
+let _hasffi: boolean | null = null
 
+interface FFIandREF {
+    ffi: typeof ffiType
+    ref: typeof refType
+}
+
+let nodeModule: FFIandREF
+
+function getffi(): FFIandREF {
+    const fs: typeof fsType = window.require('fs')
+    if (_hasffi === null) _hasffi = window.module.paths.some(item => fs.existsSync(item + '/ffi'))
+    if (_hasffi) {
+        return {
+            ffi: window.require('ffi'),
+            ref: window.require('ref')
+        }
+    } else {
+        return {
+            ffi: window.require('ffi-napi'),
+            ref: window.require('ref-napi')
+        }
+    }
+}
 
 interface LibPath { CN_path: string, EN_path: string, dll_Path: string }
 
 export default class LocalHandWrite implements HandWrite {
-    private static ffi: typeof _ffi
-    private static ref: typeof _ref
-
     private static path: LibPath
 
     //这些变量是dll需要用到的内存指针，定义在全局防止被CG
@@ -25,21 +46,13 @@ export default class LocalHandWrite implements HandWrite {
         if (!window.require) {
             throw new Error("手写模块已关闭，请在electron环境下运行");
         }
-        try {
-            LocalHandWrite.ffi = window.require<typeof _ffi>('ffi');
-            LocalHandWrite.ref = window.require<typeof _ref>('ref');
-        } catch (error) {
-            //加载ffi失败，尝试加载fii-napi
-            LocalHandWrite.ffi = window.require<typeof _ffi>('ffi-napi');
-            LocalHandWrite.ref = window.require<typeof _ref>('ref-napi');
-        }
+        if (!nodeModule) nodeModule = getffi()
         LocalHandWrite.path = {
             CN_path: basePath + "/hz.mrd",
             EN_path: basePath + "/English.mrd",
             dll_Path: basePath + "/XDLL.dll"
         }
-        let ref = LocalHandWrite.ref
-        let ffi = LocalHandWrite.ffi
+        const { ffi, ref } = nodeModule
         if (!LocalHandWrite._dll) {
             let p_uchar = ref.refType('uchar')
             LocalHandWrite._dll = ffi.Library(LocalHandWrite.path.dll_Path, {
@@ -62,7 +75,7 @@ export default class LocalHandWrite implements HandWrite {
         return new Promise<boolean>((success, fail) => {
             try {
                 LocalHandWrite._dll.ZZ_DeleteLib()
-                LocalHandWrite._dll.ZZ_CreateLib.async("47497DB3-6FA0-4FC5-9EB8-868DA935FB96", 0, LocalHandWrite.path[lib + '_path'], (err: any) => {
+                LocalHandWrite._dll.ZZ_CreateLib.async("47497DB3-6FA0-4FC5-9EB8-868DA935FB96", 0, LocalHandWrite.path.CN_path + ',' +LocalHandWrite.path.EN_path, (err: any) => {
                     if (!err) {
                         success(true)
                     } else {
@@ -78,7 +91,6 @@ export default class LocalHandWrite implements HandWrite {
     GetWords(lpXis: number[], lpYis: number[], lpCis: number[]) {
         return new Promise<string[]>((success, fail) => {
             try {
-                let ref = LocalHandWrite.ref
                 if (!lpXis || !lpYis || !lpCis) {
                     fail("缺少参数")
                 }
