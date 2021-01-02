@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-// import VueDusionKeyboard, { setKeyboardGlobalConfig } from './components/index'
-import VueDusionKeyboard, { setKeyboardGlobalConfig } from '..'
+import VueDusionKeyboard, { setKeyboardGlobalConfig } from './components/index'
+// import VueDusionKeyboard, { setKeyboardGlobalConfig } from '..'
 import './plugins/element.js'
 
 Vue.use(VueDusionKeyboard)

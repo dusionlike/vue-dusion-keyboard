@@ -105,20 +105,21 @@ ffi安装失败的小伙伴可以安装：
 |**blurHide**|当`input`标签失去焦点时是否隐藏输入组件|Boolean|true/false|true|
 |**enter-active-class**|输入组件弹出来的动画效果，基于[Animate.css](https://daneden.github.io/animate.css/)|String|见 [Animate.css](https://daneden.github.io/animate.css/) 官网|fadeInUp|
 |**leave-active-class**|输入组件隐藏时的动画效果|String|同上|fadeOutDown|
-|**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
-|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
-|**pun_keys**|替换标点符号（16个）|Array|略|无
-|**num_pun_keys**|替换数字键盘左侧标点符号（4个）|Array|略|无
-|**scope**|搜索input的容器|String|略|body
-|**body**|浮动相对的顶级容器|String|略|body
+|**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无|
+|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无|
+|**pun_keys**|替换标点符号（16个）|Array|略|无|
+|**num_pun_keys**|替换数字键盘左侧标点符号（4个）|Array|略|无|
+|**scope**|搜索input的容器|String|略|body|
+|**body**|浮动相对的顶级容器|String|略|body|
+|**bottom**|位置相对底部布局|String|略|''|
 
 **paint:**
 |属性|说明|类型|可选值|默认值|
 |:-:|:-|:-|:-|:-|
 |**show_result**|是否在右侧显示结果|Boolean|true/false|true|
 |**lib**|手写识别库|string|CN/EN|CN|
-|**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无
-|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无
+|**hand-write-api**|手写输入接口地址，不传则为离线electron模式|String|见[demo](http://jsrtj.fotoit.cn/iis/keyboard-demo/)|无|
+|**dll-path**|手写库dll路径，默认为`plug\\handWrite\\`|String|`plug\\handWrite\\`|无|
 
 ## 组件方法
 **vue-dusion-keyboard:**

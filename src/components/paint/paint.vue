@@ -2,8 +2,8 @@
   <div class="keyboard-paint" style="margin-top: 5px">
     <div class="canvas-box">
       <canvas
-        :width="500"
-        :height="400"
+        :width="460"
+        :height="350"
         ref="canvas"
         @touchstart="Down"
         @touchmove="Move"
@@ -14,7 +14,7 @@
         @mouseleave="Leave"
       ></canvas>
     </div>
-    <table v-if="show_result" style="height:400px;width:300px;" class="result-table">
+    <table v-if="show_result" class="result-table">
       <tr v-for="(item, index) in write_result" :key="index">
         <td @click="Select(text)" v-for="(text, index) in item" :key="index">{{ text }}</td>
       </tr>
@@ -260,22 +260,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.keyboard-paint__primary {
-  $p-td-width: 110px;
-  .result-table {
-    td {
-      width: $p-td-width;
-    }
-  }
-}
-.keyboard-paint__mini {
-  $p-td-width: 90px;
-  .result-table {
-    td {
-      width: $p-td-width;
-    }
-  }
-}
 .keyboard-paint {
   display: inline-block;
   vertical-align: middle;
@@ -298,8 +282,8 @@ export default Vue.extend({
     td {
       border-radius: 3px;
       border: 1px solid #aaa;
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       font-size: 40px;
       font-weight: bold;
       background: #fff;

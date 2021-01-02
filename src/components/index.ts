@@ -1,5 +1,5 @@
 import Vue from "vue";
-import _VueDusionKeyboard from "./VueDusionKeyboard/index.vue";
+import _VueDusionKeyboard from "./VueDusionKeyboard/VueDusionKeyboard.vue";
 import _Paint from "./paint/paint.vue";
 
 export { signUpKeyboard, setKeyboardGlobalConfig } from './globalConfig'

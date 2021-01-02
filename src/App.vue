@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <button @click="download">获取图像</button> -->
-    <div class="scope-test">
+    <div style="height:1440px;" class="scope-test">
       拼音：
       <input type="text" data-mode="cn" />
       手写：
@@ -91,8 +91,14 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+body {
+  height: 800px;
+  width: 1440px;
+}
 #app {
+  height: 100%;
   // height: 1500px;
+  overflow: scroll;
   // width: 1080px;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
