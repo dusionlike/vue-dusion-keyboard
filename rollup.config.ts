@@ -17,6 +17,7 @@ import vuePlugin from 'rollup-plugin-vue'
 // import nested from 'postcss-nested';
 // 替代cssnext
 // import postcssPresetEnv from 'postcss-preset-env';
+import replace from 'rollup-plugin-replace';
 
 import typescript from "rollup-plugin-typescript2";
 // import sourceMaps from "rollup-plugin-sourcemaps";
@@ -26,20 +27,11 @@ const NAME = 'VueDusionKeyboard'
 
 export default {
   input: 'src/components/index.ts',
-  moduleName: 'ModuleName',
   external: ['vue'],
-  globals: {
-    vue: 'Vue',
-  },
   output: [
     {
       file: `lib/${NAME}.es.js`,
       format: 'es',
-      sourcemap: true
-    },
-    {
-      file: `lib/${NAME}.cjs.js`,
-      format: 'cjs',
       sourcemap: true
     },
     {
@@ -94,6 +86,10 @@ export default {
         return code
           .replace(/console.log\([\s\S]+?\);?/g, '')
       },
-    }
+    },
+    replace({
+      exclude: 'node_modules/**',
+      ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
   ]
 };

@@ -5,8 +5,6 @@ import { default as notone_dict } from "./VueDusionKeyboard/dict/pinyin_dict_not
 import { default as all_dict } from "./VueDusionKeyboard/dict/pinyin_dict_all.json";
 import { setDict } from "./dictSearch";
 
-export { signUpKeyboard, setKeyboardGlobalConfig } from './globalConfig'
-
 export const VueDusionKeyboard = _VueDusionKeyboard
 export const Paint = _Paint
 
@@ -22,3 +20,5 @@ function install(vue: typeof Vue) {
 setDict(all_dict)
 
 export default { install, VueDusionKeyboard, Paint }
+export { setDict } from "./dictSearch";
+export { signUpKeyboard, setKeyboardGlobalConfig } from './globalConfig'

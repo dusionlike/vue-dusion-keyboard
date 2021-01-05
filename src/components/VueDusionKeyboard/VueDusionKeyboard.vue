@@ -89,7 +89,7 @@
                     </span>
                     <span class="key blue" @click="mode = 'biaodian'">标点</span>
                     <span class="key blue" @click="mode = 'num'">数字</span>
-                    <span class="key blue" @click="mode = 'en_cap'">键盘</span>
+                    <span class="key blue" @click="mode = 'cn'">键盘</span>
                 </div>
             </div>
             <!-- 普通键盘 -->

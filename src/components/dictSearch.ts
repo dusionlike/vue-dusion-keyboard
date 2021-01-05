@@ -31,8 +31,9 @@ export function searchWords(pinyin: string) {
     if (pinyin) {
         //先找没有分词的
         let rex = new RegExp(`^${pinyin}\\w*`);
-        let res = mFilter(dictKeys, (key) => rex.test(key)).sort()
-        let keys = res[0]
+        
+        let res = mFilter(dictKeys, (key) => rex.test(key))
+        let keys = res[0].sort()
 
         //去掉分词前面跟输入相同的
         if (!keys.length) {
@@ -43,8 +44,8 @@ export function searchWords(pinyin: string) {
         //首拼字母
         if (!keys.length) {
             rex = new RegExp(`^${pinyin.split('').join('\\w*?\'?')}[^']*`);
-            res = mFilter(res[1], (key) => rex.test(key)).sort()
-            keys = res[0]
+            res = mFilter(res[1], (key) => rex.test(key))
+            keys = res[0].sort()
         }
 
         for (const item of keys) {
