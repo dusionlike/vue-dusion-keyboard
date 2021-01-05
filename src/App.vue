@@ -27,7 +27,7 @@
       :blurHide="false"
       size="mini"
     ></vue-dusion-keyboard>-->
-    <VueDusionKeyboard ref="zzz" scope=".scope-test" @keyvalue="kkk" @del="del"></VueDusionKeyboard>
+    <VueDusionKeyboard :blurHide="false" ref="zzz" scope=".scope-test" @keyvalue="kkk" @del="del"></VueDusionKeyboard>
     <!-- <VueDusionKeyboard @keyvalue="kkk" @del="del"></VueDusionKeyboard> -->
     <br />
     <br />
@@ -81,11 +81,11 @@ export default class App extends Vue {
     console.log(res);
   }
   kkk(kk: string) {
-    console.log(kk);
+    // console.log(kk);
   }
   del(text: string, index: number) {
-    console.log(text);
-    console.log(index);
+    // console.log(text);
+    // console.log(index);
   }
 }
 </script>

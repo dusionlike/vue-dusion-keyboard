@@ -96,22 +96,22 @@
             <div v-else class="main-keyboard" style="width:1080px;">
                 <div v-if="mode === 'cn'" class="pinyin">
                     <div>
-                        <span>{{ cn_input }}</span>
+                        <span>{{ show_cn_input }}</span>
                     </div>
                 </div>
 
                 <div v-if="mode === 'cn'" class="select-list">
-                    <div>
+                    <div ref="selectRow" class="row" :style="{'margin-top':-42*(page-1)+'px'}">
                         <span
                             class="select-text"
                             v-for="(text, index) in cut_cn_list"
                             :key="index"
                             @click="(e) => clickCN(e, text)"
-                        >{{ index + 1 + "." + text }}</span>
-                        <div class="page">
-                            <p class="previous" @click="previous_page">v</p>
-                            <p class="next" @click="next_page">v</p>
-                        </div>
+                        >{{ text }}</span>
+                    </div>
+                    <div class="page">
+                        <p class="previous" @click="toPage(page-1)">v</p>
+                        <p class="next" @click="toPage(page+1)">v</p>
                     </div>
                 </div>
                 <template v-if="mode !== 'cn'">
@@ -184,27 +184,12 @@
 
 <script lang="ts">
 import AllKey from "./key";
-import { default as dict } from "./dict/pinyin_dict_notone.json";
 import SvgDel from "./svg/svg-del.vue";
 import SvgKeyboard from "./svg/svg-keybord.vue";
 import Paint from "../paint/paint.vue";
 import Vue from "vue";
 import { setGlobalCb } from "../globalConfig";
-
-interface VueDusionKeyboardData {
-    inputElement: HTMLInputElement | null;
-    keyboardStyle: any;
-    show: boolean;
-    input_top: number;
-    mode: string;
-    old_mode: string;
-    number_keys: string[];
-    cn_input: string;
-    cn_list_str: string;
-    l_min: number;
-    l_max: number;
-    handLib: string;
-}
+import { searchWords } from "../dictSearch";
 
 export default Vue.extend({
     name: "VueDusionKeyboard",
@@ -244,20 +229,20 @@ export default Vue.extend({
         body: String,
         bottom: String,
     },
-    data(): VueDusionKeyboardData {
+    data() {
         return {
-            inputElement: null,
-            keyboardStyle: {},
+            inputElement: null as HTMLInputElement | null,
+            keyboardStyle: {} as any,
             show: false,
             input_top: 0,
             mode: "cn",
             old_mode: "en_cap",
             number_keys: AllKey.number,
             cn_input: "",
-            cn_list_str: "",
-            l_min: 0,
-            l_max: 10,
+            show_cn_input: "",
+            cn_list_str: [] as string[],
             handLib: "CN",
+            page: 1,
         };
     },
     watch: {
@@ -266,6 +251,12 @@ export default Vue.extend({
             this.$nextTick(() => {
                 this.SetKeyboardPosition();
             });
+        },
+        cn_input(val: string) {
+            let res = searchWords(this.cn_input);
+            // console.log(res);
+            this.show_cn_input = res.key;
+            this.cn_list_str = res.hs;
         },
     },
     computed: {
@@ -276,10 +267,10 @@ export default Vue.extend({
             return this.mode === "en_cap" ? AllKey.cap_letter : AllKey.letter;
         },
         cn_list(): string[] {
-            return this.cn_list_str ? this.cn_list_str.split("") : [];
+            return this.cn_list_str;
         },
         cut_cn_list(): string[] {
-            return this.cn_list.slice(this.l_min, this.l_max);
+            return this.cn_list; //.slice(0, 10);
         },
     },
     methods: {
@@ -502,19 +493,7 @@ export default Vue.extend({
             this.$emit("keyvalue", key);
             if (this.mode === "cn" && !pass) {
                 this.cn_input += key;
-                this.l_min = 0;
-                this.l_max = 10;
-
-                let re = new RegExp(`^${this.cn_input}\\w*`);
-                let keys = Object.keys(dict)
-                    .filter((key) => re.test(key))
-                    .sort();
-                console.log(keys);
-                console.log(dict);
-                this.cn_list_str =
-                    keys.length > 1
-                        ? keys.reduce((a, b) => a + dict[b], "")
-                        : dict[keys[0]]; //dict[this.cn_input];
+                this.page = 1;
             } else {
                 // this.inputElement.value += key;
                 this.inputElement.value = this.insertString(
@@ -522,7 +501,7 @@ export default Vue.extend({
                     key,
                     index
                 );
-                this.TheEnd(index + 1);
+                this.TheEnd(index + key.length);
             }
             //触发input事件
             this.inputElement.dispatchEvent(
@@ -540,7 +519,7 @@ export default Vue.extend({
             if (this.mode === "cn" && this.cn_input !== "") {
                 this.inputElement.value += this.cut_cn_list[parseInt(key) - 1];
                 this.cn_input = "";
-                this.cn_list_str = "";
+                this.cn_list_str = [];
             } else {
                 // this.inputElement.value += key;
                 this.inputElement.value = this.insertString(
@@ -570,12 +549,12 @@ export default Vue.extend({
                 index
             );
             this.cn_input = "";
-            this.cn_list_str = "";
+            this.cn_list_str = [];
             //触发input事件
             this.inputElement.dispatchEvent(
                 new Event("input", { bubbles: true })
             );
-            this.TheEnd(index + 1);
+            this.TheEnd(index + text.length);
         },
         del() {
             if (
@@ -589,9 +568,10 @@ export default Vue.extend({
                     this.cn_input,
                     this.cn_input.length - 1
                 );
-                this.l_min = 0;
-                this.l_max = 10;
-                this.cn_list_str = dict[this.cn_input];
+                this.page = 1;
+                // let res = searchWords(this.cn_input);
+                // console.log(res);
+                // this.cn_list_str = res.hs;
             } else {
                 this.inputElement.value = this.delStringLast(
                     this.inputElement.value,
@@ -636,7 +616,7 @@ export default Vue.extend({
         cn_change() {
             this.mode = this.mode === "cn" ? "en_cap" : "cn";
             this.cn_input = "";
-            this.cn_list_str = "";
+            this.cn_list_str = [];
         },
         num_change() {
             this.mode = "num";
@@ -647,20 +627,16 @@ export default Vue.extend({
         Fanhui() {
             this.mode = this.old_mode;
         },
-        previous_page() {
-            if (this.l_min > 0) {
-                this.l_min = this.l_min - 10;
-                this.l_max = this.l_max - 10;
-            }
-        },
-        next_page() {
-            if (this.cn_list.length > this.l_max) {
-                this.l_min += 10;
-                this.l_max += 10;
+        toPage(i: number) {
+            let selectRow = this.$refs.selectRow as HTMLDivElement;
+            if (i > 0 && i <= selectRow.clientHeight / 42) {
+                this.page = i;
             }
         },
     },
 });
+
+var a: (ii: string) => void;
 </script>
 
 
@@ -686,13 +662,6 @@ i {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    .pinyin,
-    .select-list {
-        > div {
-            // width: $min-width;
-            margin: 0 auto;
-        }
-    }
     .pinyin {
         // margin-top: 14px;
         box-sizing: border-box;
@@ -718,21 +687,22 @@ i {
         border-bottom-left-radius: 10px;
         padding: 0;
         text-align: left;
-        > div {
-            position: relative;
-        }
-        .select-text {
-            cursor: pointer;
-            line-height: 42px;
-            font-size: 24px;
-            font-weight: bold;
-            & + .select-text {
-                margin-left: 42px;
+        overflow: hidden;
+        position: relative;
+
+        .row {
+            margin-right: 166px;
+            padding: 0 10px;
+            .select-text {
+                display: inline-block;
+                cursor: pointer;
+                line-height: 42px;
+                font-size: 24px;
+                font-weight: bold;
+                margin: 0 20px;
             }
-            &:nth-of-type(1) {
-                margin-left: 20px;
-            }
         }
+
         .page {
             position: absolute;
             top: 0;

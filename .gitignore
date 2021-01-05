@@ -1,6 +1,4 @@
-node_modules
-dist
-lib
-tsdist
-types
+/node_modules
+/dist
+/types
 /lib

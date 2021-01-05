@@ -1,6 +1,9 @@
 import Vue from "vue";
 import _VueDusionKeyboard from "./VueDusionKeyboard/VueDusionKeyboard.vue";
 import _Paint from "./paint/paint.vue";
+import { default as notone_dict } from "./VueDusionKeyboard/dict/pinyin_dict_notone.json";
+import { default as all_dict } from "./VueDusionKeyboard/dict/pinyin_dict_all.json";
+import { setDict } from "./dictSearch";
 
 export { signUpKeyboard, setKeyboardGlobalConfig } from './globalConfig'
 
@@ -16,6 +19,6 @@ function install(vue: typeof Vue) {
 //     install(window.Vue)
 // }
 
-
+setDict(all_dict)
 
 export default { install, VueDusionKeyboard, Paint }
