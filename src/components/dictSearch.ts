@@ -34,18 +34,18 @@ export function searchWords(pinyin: string) {
         
         let res = mFilter(dictKeys, (key) => rex.test(key))
         let keys = res[0].sort()
-
+        
         //去掉分词前面跟输入相同的
         if (!keys.length) {
             res = mFilter(res[1], (key) => key.replace(/'/g, '').indexOf(pinyin) === 0)
-            keys = res[0]
+            keys = res[0].sort((a,b)=>a.length-b.length)
         }
 
         //首拼字母
         if (!keys.length) {
             rex = new RegExp(`^${pinyin.split('').join('\\w*?\'?')}[^']*`);
             res = mFilter(res[1], (key) => rex.test(key))
-            keys = res[0].sort()
+            keys = res[0]
         }
 
         for (const item of keys) {
